@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
   ArrowRight,
   CheckCircle2,
@@ -62,7 +63,8 @@ export function KrogerCartDemo() {
   const [store, setStore] = useState<KrogerStore>();
   const [matches, setMatches] = useState<DisplayMatch[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useState<boolean>();
+  const [connectionNotice, setConnectionNotice] = useState('');
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
@@ -71,9 +73,18 @@ export function KrogerCartDemo() {
   useEffect(() => {
     let active = true;
     const checkConnection = async () => {
-      const response = await fetch('/api/kroger');
-      const body = (await response.json()) as { connected?: boolean };
-      if (active) setConnected(Boolean(body.connected));
+      try {
+        const body = await json<{ connected?: boolean }>(await fetch('/api/kroger'));
+        if (active) {
+          setConnected(Boolean(body.connected));
+          if (body.connected) setConnectionNotice('');
+        }
+      } catch {
+        if (active) {
+          setConnected(false);
+          setConnectionNotice('Could not check your connection. Try connecting again.');
+        }
+      }
     };
     const onMessage = (event: MessageEvent) => {
       if (
@@ -81,7 +92,6 @@ export function KrogerCartDemo() {
         event.data === 'kroger-connected'
       ) {
         void checkConnection();
-        setNotice('Kroger account connected.');
       }
     };
     void checkConnection();
@@ -162,7 +172,7 @@ export function KrogerCartDemo() {
   }
 
   function connect() {
-    setNotice('Finish signing in with Kroger in the new window.');
+    setConnectionNotice('Finish signing in with Kroger in the new window.');
     window.open(
       '/api/kroger/connect',
       'kroger-oauth',
@@ -218,7 +228,7 @@ export function KrogerCartDemo() {
   return (
     <>
       <section className="mb-6 rounded-[2rem] bg-ink px-6 py-8 text-white sm:px-9">
-        <div className="grid gap-7 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-center lg:gap-12">
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-lime">
               Live Kroger integration
@@ -231,20 +241,62 @@ export function KrogerCartDemo() {
               matching products, and send them to your Kroger cart.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              ['1', 'Local extract'],
-              ['2', 'Product match'],
-              ['3', 'Kroger cart'],
-            ].map(([value, label]) => (
-              <div
-                key={label}
-                className="rounded-2xl bg-white/7 px-2 py-4 ring-1 ring-white/10"
-              >
-                <p className="text-xl font-semibold text-lime">{value}</p>
-                <p className="mt-1 text-[11px] text-white/50">{label}</p>
+          <div className="flex flex-col items-start gap-4 lg:items-center">
+            <Image
+              src="/kroger-logo.webp"
+              alt="Kroger"
+              width={1200}
+              height={467}
+              unoptimized
+              className="h-auto w-48 max-w-full object-contain sm:w-56 lg:w-60"
+            />
+            <div className="max-w-sm lg:text-center">
+              <div className="flex flex-wrap items-center gap-2 lg:justify-center">
+                <Button
+                  onClick={connect}
+                  disabled={connected !== false}
+                  aria-label={connected ? 'Kroger account connected' : 'Connect your Kroger account'}
+                  className={`h-9 rounded-lg border-0 px-3 font-medium ring-1 ring-inset disabled:opacity-100 ${
+                    connected === undefined
+                      ? 'bg-white/5 text-white/65 ring-white/15'
+                      : connected
+                        ? 'bg-emerald-200/10 text-emerald-200 ring-emerald-200/25'
+                        : 'bg-amber-200/10 text-amber-200 ring-amber-200/25 hover:bg-amber-200/20'
+                  }`}
+                >
+                  {connected === undefined ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : connected ? (
+                    <CheckCircle2 />
+                  ) : (
+                    <LockKeyhole />
+                  )}
+                  <span aria-live="polite">
+                    {connected === undefined
+                      ? 'Checking…'
+                      : connected
+                        ? 'Connected'
+                        : 'Connect account'}
+                  </span>
+                </Button>
+                <label className="flex h-9 items-center gap-2 rounded-lg bg-white/5 px-3 text-sm text-white/65 ring-1 ring-inset ring-white/15 focus-within:ring-white/40">
+                  ZIP
+                  <Input
+                    value={zip}
+                    onChange={(event) =>
+                      setZip(event.target.value.replace(/\D/g, '').slice(0, 5))
+                    }
+                    inputMode="numeric"
+                    aria-label="ZIP code"
+                    placeholder="ZIP code"
+                    className="h-full w-14 rounded-none border-0 p-0 font-medium text-white shadow-none placeholder:text-white/40 focus-visible:ring-0 dark:bg-transparent"
+                  />
+                </label>
               </div>
-            ))}
+              {connectionNotice && (
+                <p className="mt-3 text-sm leading-6 text-white/75" role="status">{connectionNotice}</p>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -280,16 +332,6 @@ export function KrogerCartDemo() {
             ))}
           </div>
           <div className="mt-5 flex gap-2">
-            <Input
-              value={zip}
-              onChange={(event) =>
-                setZip(event.target.value.replace(/\D/g, '').slice(0, 5))
-              }
-              inputMode="numeric"
-              aria-label="ZIP code"
-              placeholder="ZIP code"
-              className="h-11 w-32 rounded-xl"
-            />
             <Button
               className="h-11 flex-1 rounded-xl"
               onClick={buildCart}
@@ -452,29 +494,24 @@ export function KrogerCartDemo() {
               </div>
 
               <footer className="border-t bg-muted/35 p-5 sm:p-7">
-                {connected ? (
-                  <Button
-                    className="h-12 w-full rounded-xl"
-                    onClick={addToCart}
-                    disabled={adding || !matchedCount}
-                  >
-                    {adding ? (
-                      <LoaderCircle className="animate-spin" />
-                    ) : (
-                      <ShoppingCart />
-                    )}
-                    {adding
-                      ? 'Adding to Kroger…'
-                      : `Add ${matchedCount} items to Kroger cart`}
-                  </Button>
-                ) : (
-                  <Button
-                    className="h-12 w-full rounded-xl"
-                    onClick={connect}
-                    disabled={!matchedCount}
-                  >
-                    <LockKeyhole /> Connect Kroger account
-                  </Button>
+                <Button
+                  className="h-12 w-full rounded-xl"
+                  onClick={addToCart}
+                  disabled={adding || !connected || !matchedCount}
+                >
+                  {adding ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    <ShoppingCart />
+                  )}
+                  {adding
+                    ? 'Adding to Kroger…'
+                    : `Add ${matchedCount} items to Kroger cart`}
+                </Button>
+                {connected === false && (
+                  <p className="mt-3 text-center text-sm text-muted-foreground">
+                    Connect your Kroger account above to add these items.
+                  </p>
                 )}
                 {notice && (
                   <div className="mt-4 rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-900">
