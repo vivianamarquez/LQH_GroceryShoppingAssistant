@@ -224,11 +224,11 @@ export function KrogerCartDemo() {
               Live Kroger integration
             </p>
             <h1 className="max-w-2xl text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-              From messy list to a real cart.
+              Grocery shopping assistant
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/65 sm:text-base">
-              Extract locally, match real products nearby, and send your choices
-              to Kroger.
+              Turn everyday requests into structured grocery lists, find
+              matching products, and send them to your Kroger cart.
             </p>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center">

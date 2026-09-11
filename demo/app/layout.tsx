@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ListLab — Local grocery intelligence',
-  description: 'A local LFM2.5 grocery extraction demo, fine-tuned with LQH.',
+  title: 'Grocery Shopping Assistant',
+  description:
+    'Turn everyday requests into structured grocery lists, find matching products, and send them to your Kroger cart.',
 };
 
 export default function RootLayout({

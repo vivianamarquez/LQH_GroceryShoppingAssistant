@@ -449,33 +449,56 @@ function ModelLab() {
   return (
     <>
       <section className="mb-6 rounded-[2rem] bg-ink px-6 py-8 text-white sm:px-9">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-lime">
-          Built with LQH
-        </p>
-        <div className="grid gap-7 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div className="grid gap-7 xl:grid-cols-[0.9fr_1.3fr] xl:items-start">
           <div>
             <h1 className="max-w-2xl text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
-              Messy requests, clean carts.
+              Grocery shopping assistant
             </h1>
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/65 sm:text-base">
-              A 1.2B Liquid model specialized with LoRA SFT, failure mining, and
-              a strict JSON contract.
+              Turn everyday requests into structured grocery lists, find
+              matching products, and send them to your Kroger cart.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              ['4.58', 'Baseline'],
-              ['8.05', 'Final eval'],
-              ['1,637', 'Core rows'],
-            ].map(([value, label]) => (
-              <div
-                key={label}
-                className="rounded-2xl bg-white/7 px-2 py-4 ring-1 ring-white/10"
+          <div>
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lime">
+                Built with{' '}
+                <a
+                  href="https://lqh.ai/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-lime/50 underline-offset-4 hover:decoration-lime"
+                >
+                  LQH
+                </a>{' '}
+                — messy requests, clean carts
+              </p>
+              <Badge
+                variant="outline"
+                className="rounded-full border-white/20 bg-white/10 px-3 py-1 text-lime"
               >
-                <p className="text-xl font-semibold text-lime">{value}</p>
-                <p className="mt-1 text-[11px] text-white/50">{label}</p>
-              </div>
-            ))}
+                Local GGUF
+              </Badge>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                ['01', 'Foundation', 'LFM2.5-1.2B-Instruct', '4.58 baseline'],
+                ['02', 'LoRA SFT', '1,637 training examples\n3 epochs · rank 32', '6.52 after round 1'],
+                ['03', 'Failure mining', '+553 targeted examples\n3 epochs · rank 32', '8.05 final eval'],
+              ].map(([step, title, detail, score]) => (
+                <article
+                  key={step}
+                  className="flex flex-col rounded-2xl bg-white/7 p-4 ring-1 ring-white/10"
+                >
+                  <span className="font-mono text-xs text-white/50">{step}</span>
+                  <h3 className="mt-3 font-semibold">{title}</h3>
+                  <p className="mt-1 whitespace-pre-line text-sm text-white/70">{detail}</p>
+                  <p className="mt-auto pt-3 text-sm font-semibold text-lime">
+                    {score}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -529,92 +552,29 @@ function ModelLab() {
         />
       </div>
 
-      <section className="mt-6 grid gap-5 lg:grid-cols-[1.45fr_0.8fr]">
-        <div className="panel p-5 sm:p-7">
-          <p className="eyebrow">How we got here</p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            {[
-              ['01', 'Foundation', 'LFM2.5-1.2B-Instruct', '4.58 baseline'],
-              ['02', 'LoRA SFT', '3 epochs · rank 32', '6.52 after round 1'],
-              [
-                '03',
-                'Failure mining',
-                '+553 targeted examples',
-                '8.05 final eval',
-              ],
-            ].map(([step, title, detail, score]) => (
-              <article key={step} className="rounded-2xl bg-muted/55 p-4">
-                <span className="font-mono text-xs text-muted-foreground">
-                  {step}
-                </span>
-                <h3 className="mt-6 font-semibold">{title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
-                <p className="mt-3 text-xs font-semibold text-blue-800">
-                  {score}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-        <aside className="rounded-3xl bg-lime p-6 text-ink">
-          <p className="eyebrow !text-blue-950/60">The useful lesson</p>
-          <h3 className="mt-4 text-xl font-semibold tracking-tight">
-            The model was not the whole problem.
-          </h3>
-          <p className="mt-3 text-sm leading-6 text-blue-950/70">
-            A schema bug forced invented filters, while prompt examples
-            triggered parroting. Fixing the schema and removing the system
-            prompt unlocked the best score.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {['167 eval cases', 'JSON constrained', 'Local GGUF'].map(
-              (fact) => (
-                <Badge
-                  key={fact}
-                  variant="outline"
-                  className="rounded-full border-blue-950/15"
-                >
-                  {fact}
-                </Badge>
-              ),
-            )}
-          </div>
-        </aside>
-      </section>
     </>
   );
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-        <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-            <ShoppingBasket className="size-5" />
-          </span>
-          <div>
-            <p className="font-semibold tracking-[-0.02em]">ListLab</p>
-            <p className="text-xs text-muted-foreground">
-              Local grocery intelligence
-            </p>
-          </div>
-        </div>
-        <Badge
-          variant="outline"
-          className="gap-1.5 rounded-full bg-white/60 px-3 py-1.5"
-        >
-          <span className="size-1.5 rounded-full bg-blue-500" /> Local-first
-          demo
-        </Badge>
-      </header>
-
+    <main className="min-h-screen bg-background pt-5 text-foreground sm:pt-7">
       <Tabs defaultValue="lab" className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
-        <TabsList className="mb-6 h-11 rounded-2xl bg-white/70 p-1 shadow-sm ring-1 ring-black/5">
-          <TabsTrigger value="lab" className="h-9 rounded-xl px-4">
+        <TabsList
+          variant="line"
+          aria-label="Assistant views"
+          className="mb-5 w-full justify-start gap-2 border-b border-primary/15 p-0 group-data-horizontal/tabs:h-12"
+        >
+          <TabsTrigger
+            value="lab"
+            className="h-12 flex-none rounded-none border-0 px-4 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px]"
+          >
             <FlaskConical /> Model lab
           </TabsTrigger>
-          <TabsTrigger value="kroger" className="h-9 rounded-xl px-4">
+          <TabsTrigger
+            value="kroger"
+            className="h-12 flex-none rounded-none border-0 px-4 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px]"
+          >
             <ShoppingCart /> Kroger cart
           </TabsTrigger>
         </TabsList>
