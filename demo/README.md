@@ -3,7 +3,7 @@
 Two local demos for the LQH grocery model:
 
 - **Model lab** compares the original LFM2.5 Instruct model with the LQH fine-tune.
-- **Shopping demo** turns a request into editable items and can create an Instacart shopping link.
+- **Kroger cart** matches the tuned model's output to real products and adds reviewed items to an authenticated Kroger cart.
 
 ## Run
 
@@ -27,4 +27,8 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000. Add `INSTACART_API_KEY` to `.env.local` to enable the final handoff.
+Open http://localhost:3000. For the Kroger cart flow, add `kroger_client_id` and `kroger_client_secret` to `.env.local`, then register this OAuth callback in the Kroger developer portal:
+
+```text
+http://localhost:3000/api/kroger/callback
+```

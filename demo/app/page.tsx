@@ -8,13 +8,16 @@ import {
   Check,
   Clipboard,
   CloudSun,
+  FlaskConical,
   LoaderCircle,
   Plus,
   Send,
   ShoppingBasket,
+  ShoppingCart,
   Sparkles,
   Trash2,
 } from 'lucide-react';
+import { KrogerCartDemo } from '@/components/kroger-cart-demo';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -606,9 +609,22 @@ export default function Home() {
         </Badge>
       </header>
 
-      <div className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
-        <ModelLab />
-      </div>
+      <Tabs defaultValue="lab" className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
+        <TabsList className="mb-6 h-11 rounded-2xl bg-white/70 p-1 shadow-sm ring-1 ring-black/5">
+          <TabsTrigger value="lab" className="h-9 rounded-xl px-4">
+            <FlaskConical /> Model lab
+          </TabsTrigger>
+          <TabsTrigger value="kroger" className="h-9 rounded-xl px-4">
+            <ShoppingCart /> Kroger cart
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="lab">
+          <ModelLab />
+        </TabsContent>
+        <TabsContent value="kroger">
+          <KrogerCartDemo />
+        </TabsContent>
+      </Tabs>
     </main>
   );
 }
