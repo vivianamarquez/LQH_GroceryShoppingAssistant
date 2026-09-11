@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-destructive: oklch(0.58 0.22 27);
+  --color-ink: var(--ink);
+  --color-lime: var(--lime);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-sm: 0.6rem;
+  --radius-md: 0.8rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+:root {
+  --background: #f3f1e9;
+  --foreground: #18211c;
+  --card: #fffef9;
+  --primary: #183f2b;
+  --primary-foreground: #f7fff2;
+  --secondary: #e7eee6;
+  --muted: #ebe9df;
+  --muted-foreground: #68716a;
+  --accent: #dff7a7;
+  --border: #dcdacf;
+  --ink: #112a1e;
+  --lime: #c9f269;
+}
+
+* { border-color: var(--border); }
+html { background: var(--background); }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 0%, rgb(201 242 105 / 18%), transparent 28rem),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+}
+button { cursor: pointer; }
+.example-chip {
+  border: 1px solid color-mix(in srgb, currentColor 13%, transparent);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  color: inherit;
+  font-size: 0.7rem;
+  opacity: 0.62;
+  transition: 150ms ease;
+}
+.example-chip:hover { opacity: 1; transform: translateY(-1px); }
+.panel {
+  border: 1px solid rgb(24 33 28 / 8%);
+  border-radius: 1.5rem;
+  background: rgb(255 254 249 / 88%);
+  box-shadow: 0 18px 60px rgb(28 39 31 / 7%);
+  backdrop-filter: blur(16px);
+}
+.json-view {
+  background:
+    linear-gradient(90deg, rgb(201 242 105 / 10%), transparent 30%),
+    #fbfcf7;
+  color: #183f2b;
+  tab-size: 2;
+}
+.eyebrow {
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-slot='tabs-content'][data-active] { animation: rise 260ms ease-out; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
