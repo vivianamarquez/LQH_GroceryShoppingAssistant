@@ -11,7 +11,7 @@ if [[ ! -x "$BIN" ]]; then
 fi
 
 mkdir -p "$DEMO_DIR/.runtime/logs"
-"$BIN" -m "$MODELS/grocery-list-v3-q8.gguf" --port 8080 -ngl 99 -c 4096 > "$DEMO_DIR/.runtime/logs/tuned.log" 2>&1 &
+"$BIN" -m "$MODELS/grocery-list-v3-q4.gguf" --port 8080 -ngl 99 -c 4096 > "$DEMO_DIR/.runtime/logs/tuned.log" 2>&1 &
 TUNED_PID=$!
 "$BIN" -m "$MODELS/LFM2.5-1.2B-Instruct-Q4_K_M.gguf" --port 8082 -ngl 99 -c 4096 > "$DEMO_DIR/.runtime/logs/base.log" 2>&1 &
 BASE_PID=$!

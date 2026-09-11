@@ -7,7 +7,7 @@ Two local demos for the LQH grocery model:
 
 ## Run
 
-The simplest option starts both models and the web app together:
+The simplest option starts both Q4 models and the web app together:
 
 ```bash
 npm run demo
@@ -16,7 +16,7 @@ npm run demo
 Or start each service manually:
 
 ```bash
-.runtime/llama/build/bin/llama-server -m ../models/grocery-list-v3-q8.gguf --port 8080 -ngl 99 -c 4096
+.runtime/llama/build/bin/llama-server -m ../models/grocery-list-v3-q4.gguf --port 8080 -ngl 99 -c 4096
 .runtime/llama/build/bin/llama-server -m ../models/LFM2.5-1.2B-Instruct-Q4_K_M.gguf --port 8082 -ngl 99 -c 4096
 ```
 

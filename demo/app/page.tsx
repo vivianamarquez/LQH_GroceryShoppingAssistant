@@ -44,7 +44,7 @@ const examples = [
 
 const models = {
   base: { label: 'Base 1.2B', size: 'Q4 · 731 MB', note: 'Prompted baseline' },
-  tuned: { label: 'LQH tuned', size: 'Q8 · 1.2 GB', note: 'LoRA SFT v3.1' },
+  tuned: { label: 'LQH tuned', size: 'Q4 · 731 MB', note: 'LoRA SFT v3.1' },
 };
 
 type Model = keyof typeof models;
