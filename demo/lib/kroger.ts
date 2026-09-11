@@ -104,6 +104,15 @@ export async function krogerFetch<T>(
   const text = await response.text();
   const data = text ? (JSON.parse(text) as Record<string, unknown>) : undefined;
 
+  if (path === '/cart/add') {
+    console.info('[kroger cart]', {
+      status: response.status,
+      requestId:
+        response.headers.get('x-correlation-id') ??
+        response.headers.get('x-request-id'),
+    });
+  }
+
   if (!response.ok) {
     const errors = data?.errors;
     const first = Array.isArray(errors) ? errors[0] : errors;

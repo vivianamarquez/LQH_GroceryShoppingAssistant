@@ -32,18 +32,18 @@
 }
 
 :root {
-  --background: #f3f1e9;
-  --foreground: #18211c;
-  --card: #fffef9;
-  --primary: #183f2b;
-  --primary-foreground: #f7fff2;
-  --secondary: #e7eee6;
-  --muted: #ebe9df;
-  --muted-foreground: #68716a;
-  --accent: #dff7a7;
-  --border: #dcdacf;
-  --ink: #112a1e;
-  --lime: #c9f269;
+  --background: #f2f6fa;
+  --foreground: #142338;
+  --card: #ffffff;
+  --primary: #0068b3;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f3fb;
+  --muted: #edf3f7;
+  --muted-foreground: #68798a;
+  --accent: #b8e6fa;
+  --border: #d4e0e9;
+  --ink: #07345b;
+  --lime: #b6e6fa;
 }
 
 * { border-color: var(--border); }
@@ -51,7 +51,7 @@ html { background: var(--background); }
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 15% 0%, rgb(201 242 105 / 18%), transparent 28rem),
+    radial-gradient(circle at 15% 0%, rgb(0 104 179 / 12%), transparent 30rem),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
@@ -68,17 +68,17 @@ button { cursor: pointer; }
 }
 .example-chip:hover { opacity: 1; transform: translateY(-1px); }
 .panel {
-  border: 1px solid rgb(24 33 28 / 8%);
+  border: 1px solid rgb(0 74 128 / 10%);
   border-radius: 1.5rem;
-  background: rgb(255 254 249 / 88%);
-  box-shadow: 0 18px 60px rgb(28 39 31 / 7%);
+  background: rgb(255 255 255 / 92%);
+  box-shadow: 0 18px 60px rgb(13 55 88 / 8%);
   backdrop-filter: blur(16px);
 }
 .json-view {
   background:
-    linear-gradient(90deg, rgb(201 242 105 / 10%), transparent 30%),
-    #fbfcf7;
-  color: #183f2b;
+    linear-gradient(90deg, rgb(0 104 179 / 8%), transparent 30%),
+    #f8fbfd;
+  color: #07345b;
   tab-size: 2;
 }
 .eyebrow {

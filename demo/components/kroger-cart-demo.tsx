@@ -16,13 +16,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import type { GroceryResult } from '@/lib/grocery';
-import type { KrogerMatch, KrogerStore } from '@/lib/kroger-types';
+import type {
+  KrogerMatch,
+  KrogerProduct,
+  KrogerStore,
+} from '@/lib/kroger-types';
+import { packagePlan, type PackagePlan } from '@/lib/package-quantity';
 
 const examples = [
   ['Quick restock', '2 gallons of milk and a loaf of sourdough'],
   ['Taco night', 'Mission tortillas, organic avocados, and Coke Zero'],
   ['Messy note', 'um two dozen eggs, baby spinach, and oat milk please'],
+  ['Failure mode', "what's the weather"],
 ];
+
+type DisplayProduct = KrogerProduct & PackagePlan;
+type DisplayMatch = Omit<KrogerMatch, 'options'> & {
+  requestedQuantity: number;
+  requestedUnit?: string;
+  options: DisplayProduct[];
+};
 
 async function json<T>(response: Response) {
   const body = (await response.json()) as T & { error?: string };
@@ -30,12 +43,24 @@ async function json<T>(response: Response) {
   return body;
 }
 
+function number(value: number) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
+function requestedLabel(match: DisplayMatch) {
+  const unit = match.requestedUnit?.toLowerCase();
+  if (!unit || ['each', 'ea', 'count', 'counts', 'ct'].includes(unit)) {
+    return `${number(match.requestedQuantity)} ${match.query}`;
+  }
+  return `${number(match.requestedQuantity)} ${match.requestedUnit} ${match.query}`;
+}
+
 export function KrogerCartDemo() {
   const [text, setText] = useState(examples[0][1]);
-  const [zip, setZip] = useState('45202');
+  const [zip, setZip] = useState('71104');
   const [list, setList] = useState<GroceryResult>();
   const [store, setStore] = useState<KrogerStore>();
-  const [matches, setMatches] = useState<KrogerMatch[]>([]);
+  const [matches, setMatches] = useState<DisplayMatch[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [connected, setConnected] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -79,8 +104,9 @@ export function KrogerCartDemo() {
           body: JSON.stringify({ text, model: 'tuned' }),
         }),
       );
-      setList(inference.result);
-      if ('error' in inference.result) {
+      const groceryList = inference.result;
+      setList(groceryList);
+      if ('error' in groceryList) {
         setMatches([]);
         setStore(undefined);
         return;
@@ -93,13 +119,39 @@ export function KrogerCartDemo() {
           body: JSON.stringify({
             action: 'search',
             zip,
-            items: inference.result.line_items,
+            items: groceryList.line_items,
           }),
         }),
       );
+      const displayMatches = found.matches.map((match, index) => {
+        const item = groceryList.line_items[index];
+        if (!item) {
+          return {
+            ...match,
+            requestedQuantity: match.quantity,
+            options: match.options.map((option) => ({
+              ...option,
+              cartQuantity: match.quantity,
+            })),
+          };
+        }
+        const options = match.options.map((option) => ({
+          ...option,
+          ...packagePlan(item, option.size),
+        }));
+        return {
+          ...match,
+          requestedQuantity: item.line_item_measurements?.quantity ?? 1,
+          requestedUnit: item.line_item_measurements?.unit,
+          quantity: options[0]?.cartQuantity ?? match.quantity,
+          options,
+        };
+      });
       setStore(found.store);
-      setMatches(found.matches);
-      setSelected(found.matches.map((match) => match.options[0]?.upc ?? ''));
+      setMatches(displayMatches);
+      setSelected(
+        displayMatches.map((match) => match.options[0]?.upc ?? ''),
+      );
     } catch (reason) {
       setError(
         reason instanceof Error ? reason.message : 'Unable to build the cart.',
@@ -149,6 +201,19 @@ export function KrogerCartDemo() {
   }
 
   const matchedCount = selected.filter(Boolean).length;
+
+  function selectProduct(index: number, upc: string) {
+    setSelected((current) =>
+      current.map((value, itemIndex) => (itemIndex === index ? upc : value)),
+    );
+    setMatches((current) =>
+      current.map((match, itemIndex) => {
+        if (itemIndex !== index) return match;
+        const option = match.options.find((value) => value.upc === upc);
+        return option ? { ...match, quantity: option.cartQuantity } : match;
+      }),
+    );
+  }
 
   return (
     <>
@@ -264,10 +329,13 @@ export function KrogerCartDemo() {
           ) : 'error' in list ? (
             <div className="grid min-h-[30rem] place-items-center p-8 text-center">
               <div className="max-w-sm">
-                <p className="eyebrow">Not a grocery request</p>
+                <p className="eyebrow">No shopping list found</p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-                  Nothing was added—and that’s correct.
+                  This doesn’t look like a grocery request.
                 </h2>
+                <p className="mt-3 leading-7 text-muted-foreground">
+                  Try asking for groceries or household essentials.
+                </p>
               </div>
             </div>
           ) : (
@@ -294,7 +362,11 @@ export function KrogerCartDemo() {
               </header>
 
               <div className="space-y-3 p-5 sm:p-7">
-                {matches.map((match, index) => (
+                {matches.map((match, index) => {
+                  const option = match.options.find(
+                    (value) => value.upc === selected[index],
+                  );
+                  return (
                   <article
                     key={`${match.query}-${index}`}
                     className="rounded-2xl border bg-white p-4 shadow-sm"
@@ -335,13 +407,7 @@ export function KrogerCartDemo() {
                           <select
                             value={selected[index]}
                             onChange={(event) =>
-                              setSelected((current) =>
-                                current.map((value, itemIndex) =>
-                                  itemIndex === index
-                                    ? event.target.value
-                                    : value,
-                                ),
-                              )
+                              selectProduct(index, event.target.value)
                             }
                             aria-label={`Kroger match for ${match.query}`}
                             className="mt-2 h-10 w-full rounded-xl border bg-muted/45 px-3 text-sm outline-none focus:ring-2 focus:ring-primary/20"
@@ -362,10 +428,27 @@ export function KrogerCartDemo() {
                             No pickup match found at this store.
                           </p>
                         )}
+                        {option?.packageQuantity && option.packageUnit && (
+                          <p className="mt-2 text-xs font-medium text-blue-700">
+                            Requested {requestedLabel(match)} · Cart uses{' '}
+                            {match.quantity} × {option.size} ={' '}
+                            {number(match.quantity * option.packageQuantity)}{' '}
+                            {option.packageUnit === 'ct'
+                              ? match.query
+                              : option.packageUnit}
+                          </p>
+                        )}
+                        {option?.needsReview && (
+                          <p className="mt-2 text-xs font-medium text-amber-700">
+                            Requested {requestedLabel(match)} · Package size is
+                            unclear, so review the cart quantity.
+                          </p>
+                        )}
                       </div>
                     </div>
                   </article>
-                ))}
+                  );
+                })}
               </div>
 
               <footer className="border-t bg-muted/35 p-5 sm:p-7">
@@ -394,19 +477,25 @@ export function KrogerCartDemo() {
                   </Button>
                 )}
                 {notice && (
-                  <div className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                  <div className="mt-4 rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-900">
                     <p className="flex items-center gap-2">
                       <CheckCircle2 className="size-4" /> {notice}
                     </p>
                     {notice.includes('added') && (
-                      <a
-                        href="https://www.kroger.com/cart"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-2 inline-flex items-center gap-1 font-semibold hover:underline"
-                      >
-                        Open Kroger cart <ArrowRight className="size-3" />
-                      </a>
+                      <>
+                        <a
+                          href="https://www.kroger.com/cart"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 font-semibold hover:underline"
+                        >
+                          Open Kroger cart <ArrowRight className="size-3" />
+                        </a>
+                        <p className="mt-2 leading-6">
+                          Missing items? Check Kroger’s Saved for Later and
+                          choose Move to Cart. Adding again increases quantities.
+                        </p>
+                      </>
                     )}
                   </div>
                 )}

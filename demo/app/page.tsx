@@ -184,7 +184,7 @@ function ResultPanel({
       await QRCode.toDataURL(body.url, {
         width: 220,
         margin: 1,
-        color: { dark: '#112a1e', light: '#ffffff' },
+        color: { dark: '#07345b', light: '#ffffff' },
       }),
     );
     setHandoff('Your list is ready.');
@@ -409,7 +409,7 @@ function ResultPanel({
                       href={url}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-emerald-800 hover:underline"
+                      className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-800 hover:underline"
                     >
                       Continue to Instacart <ArrowRight className="size-3" />
                     </a>
@@ -549,7 +549,7 @@ function ModelLab() {
                 </span>
                 <h3 className="mt-6 font-semibold">{title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
-                <p className="mt-3 text-xs font-semibold text-emerald-800">
+                <p className="mt-3 text-xs font-semibold text-blue-800">
                   {score}
                 </p>
               </article>
@@ -557,11 +557,11 @@ function ModelLab() {
           </div>
         </div>
         <aside className="rounded-3xl bg-lime p-6 text-ink">
-          <p className="eyebrow !text-emerald-900/60">The useful lesson</p>
+          <p className="eyebrow !text-blue-950/60">The useful lesson</p>
           <h3 className="mt-4 text-xl font-semibold tracking-tight">
             The model was not the whole problem.
           </h3>
-          <p className="mt-3 text-sm leading-6 text-emerald-950/70">
+          <p className="mt-3 text-sm leading-6 text-blue-950/70">
             A schema bug forced invented filters, while prompt examples
             triggered parroting. Fixing the schema and removing the system
             prompt unlocked the best score.
@@ -572,7 +572,7 @@ function ModelLab() {
                 <Badge
                   key={fact}
                   variant="outline"
-                  className="rounded-full border-emerald-950/15"
+                  className="rounded-full border-blue-950/15"
                 >
                   {fact}
                 </Badge>
@@ -604,7 +604,7 @@ export default function Home() {
           variant="outline"
           className="gap-1.5 rounded-full bg-white/60 px-3 py-1.5"
         >
-          <span className="size-1.5 rounded-full bg-emerald-500" /> Local-first
+          <span className="size-1.5 rounded-full bg-blue-500" /> Local-first
           demo
         </Badge>
       </header>
