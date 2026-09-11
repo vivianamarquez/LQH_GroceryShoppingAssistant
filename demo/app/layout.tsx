@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: 'Grocery Shopping Assistant',
   description:
     'Turn everyday requests into structured grocery lists, find matching products, and send them to your Kroger cart.',
+  icons: {
+    icon: { url: '/favicon.svg?v=grocery', type: 'image/svg+xml', sizes: 'any' },
+    shortcut: '/favicon.svg?v=grocery',
+  },
 };
 
 export default function RootLayout({

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import QRCode from 'qrcode';
 import {
   ArrowRight,
+  BookOpen,
   Check,
   Clipboard,
   CloudSun,
@@ -18,6 +19,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { KrogerCartDemo } from '@/components/kroger-cart-demo';
+import { TechnicalDetails } from '@/components/technical-details';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -567,15 +569,21 @@ export default function Home() {
         >
           <TabsTrigger
             value="lab"
-            className="h-12 flex-none rounded-none border-0 px-4 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px]"
+            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
           >
-            <FlaskConical /> Model lab
+            <FlaskConical className="hidden sm:block" /> Model lab
           </TabsTrigger>
           <TabsTrigger
             value="kroger"
-            className="h-12 flex-none rounded-none border-0 px-4 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px]"
+            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
           >
-            <ShoppingCart /> Kroger cart
+            <ShoppingCart className="hidden sm:block" /> Kroger cart
+          </TabsTrigger>
+          <TabsTrigger
+            value="technical"
+            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+          >
+            <BookOpen className="hidden sm:block" /> About this app
           </TabsTrigger>
         </TabsList>
         <TabsContent value="lab">
@@ -583,6 +591,9 @@ export default function Home() {
         </TabsContent>
         <TabsContent value="kroger">
           <KrogerCartDemo />
+        </TabsContent>
+        <TabsContent value="technical">
+          <TechnicalDetails />
         </TabsContent>
       </Tabs>
     </main>
