@@ -36,8 +36,31 @@ function quantity(item: GroceryItem) {
   return Math.max(1, Math.ceil(item.line_item_measurements?.quantity ?? 1));
 }
 
-function productOptions(data: ProductResponse, preferredBrand?: string) {
-  const options: KrogerProduct[] = (data.data ?? []).map((product) => {
+function normalize(text: string) {
+  return text.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+}
+
+function hasLabel(text: string, label: string) {
+  const value = ` ${normalize(text)} `;
+  const term = normalize(label);
+  return Boolean(term) && value.includes(` ${term} `) &&
+    !['non', 'not', 'no'].some((prefix) => value.includes(` ${prefix} ${term} `));
+}
+
+function productQuery(item: GroceryItem) {
+  const labels = item.filters?.health_filters?.map(({ label }) => label.trim()) ?? [];
+  return [...new Set(labels.filter((label) => label && !hasLabel(item.product, label))), item.product]
+    .join(' ');
+}
+
+function productOptions(data: ProductResponse, requested: GroceryItem) {
+  const labels = requested.filters?.health_filters ?? [];
+  const brands = requested.filters?.brand_filters ?? [];
+  const products = (data.data ?? []).filter((product) =>
+    labels.every(({ label }) => hasLabel(product.description, label)) &&
+    (!brands.length || brands.some(({ brand }) => hasLabel(product.brand || product.description, brand))),
+  );
+  const options: KrogerProduct[] = products.map((product) => {
     const item = product.items?.[0];
     return {
       upc: product.upc ?? product.productId,
@@ -48,14 +71,6 @@ function productOptions(data: ProductResponse, preferredBrand?: string) {
     };
   });
 
-  if (preferredBrand) {
-    const brand = preferredBrand.toLowerCase();
-    options.sort(
-      (a, b) =>
-        Number((b.brand ?? '').toLowerCase().includes(brand)) -
-        Number((a.brand ?? '').toLowerCase().includes(brand)),
-    );
-  }
   return options.slice(0, 4);
 }
 
@@ -64,10 +79,9 @@ async function searchProducts(
   locationId: string,
   item: GroceryItem,
 ) {
-  const brand = item.filters?.brand_filters?.[0]?.brand;
-  const terms = brand
-    ? [`${brand} ${item.product}`, item.product]
-    : [item.product];
+  const brands = item.filters?.brand_filters ?? [];
+  const query = productQuery(item);
+  const terms = new Set([...brands.map(({ brand }) => `${brand} ${query}`), query, item.product]);
 
   for (const term of terms) {
     const params = new URLSearchParams({
@@ -80,7 +94,8 @@ async function searchProducts(
       `/products?${params}`,
       token,
     );
-    const options = productOptions(products, brand);
+    // Broader searches still have to satisfy every requested preference.
+    const options = productOptions(products, item);
     if (options.length) return options;
   }
   return [];
@@ -119,7 +134,7 @@ async function matchItems(zip: string, items: GroceryItem[]) {
   };
   const matches: KrogerMatch[] = await Promise.all(
     items.slice(0, 20).map(async (item) => ({
-      query: item.product,
+      query: productQuery(item),
       quantity: quantity(item),
       options: await searchProducts(token, location.locationId, item),
     })),
