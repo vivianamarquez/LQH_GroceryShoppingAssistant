@@ -1,4 +1,177 @@
 import type { ReactNode } from 'react';
+import { baselineSystemPrompt } from '@/lib/baseline-system-prompt';
+
+const workflow = [
+  {
+    title: 'Specification and rubric',
+    content: (
+      <>
+        <p>
+          In LQH, we defined the <strong>JSON fields, input noise, and edge
+          cases</strong> in <code>SPEC.md</code>, then created a grading rubric.
+        </p>
+        <ul className="list-disc space-y-2 pl-5 marker:text-primary">
+          <li>
+            <strong>JSON fields:</strong> a title and generic product names,
+            plus stated quantities, units, brands, and dietary preferences.
+          </li>
+          <li>
+            <strong>Input noise:</strong> typos, filler words, transcription
+            errors, and run-on sentences.
+          </li>
+          <li>
+            <strong>Edge cases:</strong> quantity corrections, mixed requests,
+            and no-grocery requests returning <code>not_a_grocery_request</code>.
+          </li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    title: 'Generate and filter data',
+    content: (
+      <p>
+        Generate a structured grocery intent, render it as noisy text,
+        verify the details, and build the target JSON in code. Medium-judge
+        filtering at 7/10 retained 1,637 of 2,000 training examples and 167
+        of 200 evaluation examples.
+      </p>
+    ),
+    example: {
+      label: 'Example target for “um, milk please”',
+      code: `{
+  "title": "Grocery list",
+  "line_items": [
+    { "product": "milk" }
+  ]
+}`,
+    },
+  },
+  {
+    title: 'Baseline models',
+    content: (
+      <>
+        <p>
+          Test the original models with a <strong>system prompt</strong>{' '}
+          describing the extraction rules.
+        </p>
+        <p>
+          Baseline scores were <strong>4.58/10 for the 1.2B model</strong>,
+          3.14/10 for the tested 350M model, and about 8.5/10 for the hosted
+          API reference.
+        </p>
+        <details className="overflow-hidden rounded-xl border bg-white/80 text-sm">
+          <summary className="cursor-pointer px-4 py-3 font-medium text-primary focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary">
+            View baseline system prompt
+          </summary>
+          <div className="border-t px-4 py-3">
+            <p className="mb-3 leading-6">
+              Saved prompt for the 4.58/10 baseline. The live Model lab uses
+              a shorter prompt.
+            </p>
+            <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap break-words rounded-lg bg-white p-3 font-mono leading-6" tabIndex={0} aria-label="Saved baseline system prompt">
+              <code>{baselineSystemPrompt}</code>
+            </pre>
+          </div>
+        </details>
+      </>
+    ),
+  },
+  {
+    title: 'Two LoRA SFT runs',
+    content: (
+      <>
+        <p>
+          <strong>Round 1:</strong> train on the first 1,637 examples and
+          inspect the errors.
+        </p>
+        <p>
+          <strong>Round 2:</strong> generate 553 additional examples targeting
+          those failures. Retrain from the original Instruct model
+          with the expanded mix.
+        </p>
+      </>
+    ),
+    example: {
+      label: 'Shared settings · both runs',
+      code: `epochs: 3
+LoRA rank: 32`,
+    },
+  },
+  {
+    title: 'Evaluate and correct',
+    content: (
+      <>
+        <p>
+          Round 1 scored <strong>6.52</strong>; round 2 initially scored{' '}
+          <strong>6.43</strong>. A schema bug forced unwanted filters.
+        </p>
+        <p>
+          <strong>Correct the schema:</strong> 7.14 with a system prompt.
+          <br />
+          <strong>Remove the prompt’s example-product interference:</strong>{' '}
+          8.05 on the same round-2 checkpoint.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Export local GGUF files',
+    content: (
+      <>
+        <p>
+          <strong>Merge the round-2 adapter</strong> into
+          LFM2.5-1.2B-Instruct and export Q4 and Q8 GGUF files. Run them with{' '}
+          <code>llama.cpp</code>.
+        </p>
+        <p>
+          The demo currently selects <strong>Q4 for both models</strong>,
+          with <strong>no system prompt for the tuned model</strong>.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Kroger account and web app',
+    content: (
+      <>
+        <p>
+          Create a Kroger developer account, register an <strong>OAuth app
+          and callback URL</strong>, and store its credentials server-side.
+        </p>
+        <p>
+          Build the <strong>React/TypeScript interface</strong> with
+          Next.js-style routes, running on Vinext/Vite, and connect its
+          server routes to llama.cpp and Kroger.
+        </p>
+      </>
+    ),
+  },
+  {
+    title: 'Find products and add to cart',
+    content: (
+      <>
+        <p>
+          Use the <strong>ZIP to select a store</strong>, search its catalog
+          using the extracted products and preferences, then show product
+          choices and package quantities.
+        </p>
+        <p>
+          <strong>After review, send UPCs and quantities</strong> to the
+          connected Kroger account and open the cart in a new tab.
+        </p>
+      </>
+    ),
+    example: {
+      label: 'Illustrative cart item · UPC comes from Kroger',
+      code: `{
+  "upc": "<selected product UPC>",
+  "quantity": 2,
+  "modality": "PICKUP"
+}`,
+    },
+  },
+];
 
 function Heading({
   label,
@@ -49,49 +222,28 @@ export function TechnicalDetails() {
           natural speech, into structured grocery JSON. This is the sequence we
           followed.
         </Heading>
-        <ol className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            [
-              'Specification and rubric',
-              'In LQH, we defined the JSON fields, input noise, and edge cases in SPEC.md, then created a grading rubric. The original format targeted Instacart; the app later reused the extraction structure for Kroger.',
-            ],
-            [
-              'Generate and filter data',
-              'Generate a structured grocery intent, render it as noisy text, verify the details, and build the target JSON in code. Medium-judge filtering at 7/10 retained 1,637 of 2,000 training examples and 167 of 200 evaluation examples.',
-            ],
-            [
-              'Baseline models',
-              'Test the original models with a system prompt describing the extraction rules. The chosen 1.2B local-inference target scored 4.58/10, versus 3.14 for the tested 350M model and about 8.5 for the hosted API reference.',
-            ],
-            [
-              'Two LoRA SFT runs',
-              'Train on the first 1,637 examples, inspect the errors, then generate 553 additional examples targeting those failures. Retrain from the original Instruct model with the expanded mix. Both runs used 3 epochs and rank 32; round 2 did not continue round 1’s adapter.',
-            ],
-            [
-              'Evaluate and correct',
-              'Round 1 scored 6.52; round 2 initially scored 6.43. A schema bug forced unwanted filters. Correcting it yielded 7.14 with a system prompt; removing the prompt’s example-product interference yielded 8.05 on the same round-2 checkpoint.',
-            ],
-            [
-              'Export local GGUF files',
-              'Merge the round-2 adapter into LFM2.5-1.2B-Instruct and export Q4 and Q8 GGUF files. Run them with llama.cpp. The demo currently selects Q4 for both the original and tuned models, with no system prompt for the tuned model.',
-            ],
-            [
-              'Kroger account and web app',
-              'Create a Kroger developer account, register an OAuth app and callback URL, and store its credentials server-side. Build the React/TypeScript interface with Next.js-style routes, running on Vinext/Vite, and connect its server routes to llama.cpp and Kroger.',
-            ],
-            [
-              'Find products and add to cart',
-              'Use the ZIP to select a store, search its catalog using the extracted products and preferences, then show product choices and package quantities. After review, send UPCs and quantities to the connected Kroger account and open the cart in a new tab.',
-            ],
-          ].map(([title, text], index) => (
-            <li key={title} className="rounded-2xl bg-muted/60 p-5">
-              <p className="mb-3 font-mono text-sm font-semibold text-primary">
-                {String(index + 1).padStart(2, '0')}
-              </p>
-              <h3 className="text-lg font-semibold">{title}</h3>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                {text}
-              </p>
+        <ol className="grid gap-5 lg:grid-cols-2">
+          {workflow.map(({ title, content, example }, index) => (
+            <li key={title} className="min-w-0 rounded-2xl bg-muted/60 p-5 sm:p-6">
+              <div className="mb-4 flex items-baseline gap-3">
+                <span className="font-mono text-sm font-semibold text-primary">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="text-lg font-semibold">{title}</h3>
+              </div>
+              <div className="space-y-3 leading-7 text-muted-foreground [&_strong]:font-semibold [&_strong]:text-foreground [&_code]:rounded [&_code]:bg-white [&_code]:px-1 [&_code]:text-sm [&_code]:text-primary">
+                {content}
+              </div>
+              {example && (
+                <figure className="mt-5 overflow-hidden rounded-xl border bg-white/80">
+                  <figcaption className="border-b px-4 py-2 text-sm font-medium text-muted-foreground">
+                    {example.label}
+                  </figcaption>
+                  <pre className="whitespace-pre-wrap break-words p-4 font-mono text-sm leading-6 text-ink">
+                    <code>{example.code}</code>
+                  </pre>
+                </figure>
+              )}
             </li>
           ))}
         </ol>
