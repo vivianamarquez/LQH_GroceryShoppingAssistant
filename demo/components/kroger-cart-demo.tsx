@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
-  ArrowRight,
   CheckCircle2,
   LoaderCircle,
   LockKeyhole,
@@ -68,7 +67,6 @@ export function KrogerCartDemo() {
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
 
   useEffect(() => {
     let active = true;
@@ -105,7 +103,6 @@ export function KrogerCartDemo() {
   async function buildCart() {
     setBusy(true);
     setError('');
-    setNotice('');
     try {
       const inference = await json<{ result: GroceryResult }>(
         await fetch('/api/infer', {
@@ -181,26 +178,32 @@ export function KrogerCartDemo() {
   }
 
   async function addToCart() {
+    if (adding) return;
     setAdding(true);
     setError('');
-    setNotice('');
+    // Reserve the tab during the click so the browser allows it.
+    const cartWindow = window.open('', '_blank');
     try {
+      if (!cartWindow) {
+        throw new Error('Allow pop-ups for this demo, then try again. No items were added.');
+      }
+      cartWindow.opener = null;
+      cartWindow.document.title = 'Adding to Kroger…';
       const cartItems = matches.flatMap((match, index) =>
         selected[index]
           ? [{ upc: selected[index], quantity: match.quantity }]
           : [],
       );
-      const body = await json<{ added: number }>(
+      await json<{ added: number }>(
         await fetch('/api/kroger', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'cart', cartItems }),
         }),
       );
-      setNotice(
-        `${body.added} ${body.added === 1 ? 'item' : 'items'} added to your Kroger cart.`,
-      );
+      cartWindow.location.replace('https://www.kroger.com/cart');
     } catch (reason) {
+      cartWindow?.close();
       const message =
         reason instanceof Error ? reason.message : 'Unable to add to cart.';
       setError(message);
@@ -341,9 +344,6 @@ export function KrogerCartDemo() {
               {busy ? 'Matching products…' : 'Find Kroger products'}
             </Button>
           </div>
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            Kroger credentials stay on the server · checkout stays with Kroger
-          </p>
           {error && (
             <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
@@ -512,29 +512,6 @@ export function KrogerCartDemo() {
                   <p className="mt-3 text-center text-sm text-muted-foreground">
                     Connect your Kroger account above to add these items.
                   </p>
-                )}
-                {notice && (
-                  <div className="mt-4 rounded-xl bg-blue-50 px-4 py-3 text-sm text-blue-900">
-                    <p className="flex items-center gap-2">
-                      <CheckCircle2 className="size-4" /> {notice}
-                    </p>
-                    {notice.includes('added') && (
-                      <>
-                        <a
-                          href="https://www.kroger.com/cart"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 font-semibold hover:underline"
-                        >
-                          Open Kroger cart <ArrowRight className="size-3" />
-                        </a>
-                        <p className="mt-2 leading-6">
-                          Missing items? Check Kroger’s Saved for Later and
-                          choose Move to Cart. Adding again increases quantities.
-                        </p>
-                      </>
-                    )}
-                  </div>
                 )}
               </footer>
             </>
