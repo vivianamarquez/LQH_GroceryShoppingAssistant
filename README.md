@@ -22,4 +22,4 @@ The local working folder also contains `models/` for GGUF model files and `.lqh/
 The `demos/` folder contains the different demos and versions built around the model.
 
 - [local_demo](demos/local_demo/): the local web demo, with a **Model lab** for comparing the original and fine-tuned models, a **Kroger cart** integration, and an **About this app** page explaining the workflow.
-- [vercel_demo](demos/vercel_demo/): the Vercel-ready version, using hosted LQH inference for the tuned model and wllama browser inference for the original Q4 model.
+- [vercel_demo](demos/vercel_demo/): the Vercel-ready version, using hosted LQH inference for the tuned model and wllama browser inference for the original Q4 model, with WebGPU acceleration when available and a CPU fallback.
