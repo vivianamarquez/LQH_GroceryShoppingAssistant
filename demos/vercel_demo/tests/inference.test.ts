@@ -113,14 +113,14 @@ test('a temporary gateway failure retries once with the same overall deadline', 
 
 test('persistent gateway failure stops after two attempts; auth and model errors do not retry', async () => {
   configure();
-  for (const status of [401, 403, 404, 400, 429, 503]) {
+  for (const status of [401, 403, 404, 400, 429, 503, 524]) {
     const fetcher = mock.method(globalThis, 'fetch', async () => new Response('private test-key', { status }));
     const response = await POST(request({ text: 'milk' }));
     const body = await response.json();
     assert.equal(response.status, 502);
     assert.equal(body.code, `lqh_http_${status}`);
     assert.doesNotMatch(body.error, /private|test-key/);
-    assert.equal(fetcher.mock.callCount(), status === 503 ? 2 : 1);
+    assert.equal(fetcher.mock.callCount(), [503, 524].includes(status) ? 2 : 1);
     fetcher.mock.restore();
   }
 });
@@ -190,4 +190,78 @@ test('API JSON, empty output, output JSON, schema and truncation failures stay d
   }
   mock.method(globalThis, 'fetch', async () => new Response('<html>gateway</html>'));
   assert.equal((await (await POST(request({ text: 'milk' }))).json()).code, 'invalid_json');
+});
+
+function streamingRequest() {
+  return new Request(request({ text: 'milk' }), { headers: { Accept: 'application/x-ndjson' } });
+}
+
+test('a 524 streams a real retry notice before a successful second attempt', async () => {
+  configure();
+  const signals: unknown[] = [];
+  const fetcher = mock.method(globalThis, 'fetch', async (_url: string, init: RequestInit) => {
+    signals.push(init.signal);
+    if (signals.length === 1) return new Response('private gateway body test-key', { status: 524 });
+    return Response.json({ choices: [{ message: { content: '{"error":"not_a_grocery_request"}' } }] });
+  });
+  const response = await POST(streamingRequest());
+  assert.match(response.headers.get('content-type')!, /application\/x-ndjson/);
+  assert.match(response.headers.get('cache-control')!, /no-store/);
+  const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
+  assert.deepEqual(JSON.parse((await reader.read()).value!), { type: 'started' });
+  const progress = JSON.parse((await reader.read()).value!);
+  assert.equal(progress.type, 'progress');
+  assert.match(progress.message, /Retrying once/);
+  assert.equal(fetcher.mock.callCount(), 1, 'Progress arrives before the second attempt finishes');
+  const result = JSON.parse((await reader.read()).value!);
+  assert.deepEqual(result, { type: 'result', result: { error: 'not_a_grocery_request' } });
+  assert.equal((await reader.read()).done, true);
+  assert.equal(signals.length, 2);
+  assert.equal(signals[0], signals[1]);
+  assert.doesNotMatch(JSON.stringify([progress, result]), /private|test-key/);
+});
+
+test('a second 524 ends the stream with a readable error, never a third attempt', async () => {
+  configure();
+  const fetcher = mock.method(globalThis, 'fetch', async () => new Response(null, { status: 524 }));
+  const events = (await (await POST(streamingRequest())).text()).trim().split('\n').map(line => JSON.parse(line));
+  assert.deepEqual(events.map(event => event.type), ['started', 'progress', 'error']);
+  assert.equal(events.at(-1).code, 'lqh_http_524');
+  assert.match(events.at(-1).error, /timed out again/);
+  assert.equal(fetcher.mock.callCount(), 2);
+});
+
+test('the total deadline still stops a streamed retry, and is created only once', async () => {
+  configure();
+  const deadline = new AbortController();
+  const timer = mock.method(AbortSignal, 'timeout', (ms: number) => {
+    assert.equal(ms, 270_000);
+    return deadline.signal;
+  });
+  const fetcher = mock.method(globalThis, 'fetch', async () => new Response(null, { status: 524 }));
+  const reader = (await POST(streamingRequest())).body!.pipeThrough(new TextDecoderStream()).getReader();
+  await reader.read();
+  await reader.read();
+  deadline.abort(new DOMException('Timeout', 'TimeoutError'));
+  const event = JSON.parse((await reader.read()).value!);
+  assert.equal(event.type, 'error');
+  assert.equal(event.code, 'timeout');
+  assert.equal((await reader.read()).done, true);
+  assert.equal(timer.mock.callCount(), 1);
+  assert.equal(fetcher.mock.callCount(), 1);
+});
+
+test('disconnecting a streaming caller cancels the pending retry', async () => {
+  configure();
+  let signal!: AbortSignal;
+  const fetcher = mock.method(globalThis, 'fetch', async (_url: string, init: RequestInit) => {
+    signal = init.signal!;
+    return new Response(null, { status: 524 });
+  });
+  const reader = (await POST(streamingRequest())).body!.getReader();
+  await reader.read();
+  await reader.read();
+  await reader.cancel();
+  assert.equal(signal.aborted, true);
+  assert.equal(fetcher.mock.callCount(), 1);
 });

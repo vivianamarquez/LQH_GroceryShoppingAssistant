@@ -7,6 +7,7 @@ import {
   LoaderCircle,
   LockKeyhole,
   MapPin,
+  RotateCcw,
   Search,
   ShoppingBasket,
   ShoppingCart,
@@ -23,6 +24,7 @@ import type {
 } from '@/lib/kroger-types';
 import { packagePlan, type PackagePlan } from '@/lib/package-quantity';
 import { inferHosted } from '@/lib/hosted-inference';
+import { RequestProgress } from '@/components/request-progress';
 
 const examples = [
   ['Quick restock', '2 gallons of milk and a loaf of sourdough'],
@@ -69,6 +71,7 @@ export function KrogerCartDemo() {
   const [progress, setProgress] = useState('');
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
+  const [retrySearch, setRetrySearch] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -106,6 +109,7 @@ export function KrogerCartDemo() {
     if (busy || adding) return;
     setBusy(true);
     setError('');
+    setRetrySearch(false);
     setList(undefined);
     setStore(undefined);
     setMatches([]);
@@ -160,6 +164,7 @@ export function KrogerCartDemo() {
         displayMatches.map((match) => match.options[0]?.upc ?? ''),
       );
     } catch (reason) {
+      setRetrySearch(true);
       setError(
         reason instanceof Error ? reason.message : 'Unable to build the cart.',
       );
@@ -182,6 +187,7 @@ export function KrogerCartDemo() {
     if (adding || busy) return;
     setAdding(true);
     setError('');
+    setRetrySearch(false);
     // Reserve the tab during the click so the browser allows it.
     const cartWindow = window.open('', '_blank');
     try {
@@ -343,13 +349,13 @@ export function KrogerCartDemo() {
               onClick={buildCart}
               disabled={busy || adding || !text.trim() || zip.length !== 5}
             >
-              {busy ? <LoaderCircle className="animate-spin" /> : <Search />}
-              {busy ? 'Working…' : 'Find Kroger products'}
+              {busy ? <LoaderCircle className="animate-spin" /> : retrySearch ? <RotateCcw /> : <Search />}
+              {busy ? 'Working…' : retrySearch ? 'Try again' : 'Find Kroger products'}
             </Button>
           </div>
-          {busy && <output className="mt-3 block text-center text-xs text-muted-foreground">{progress}</output>}
+          {busy && <RequestProgress message={progress} />}
           {error && (
-            <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p role="alert" className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
             </p>
           )}

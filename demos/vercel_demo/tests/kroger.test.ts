@@ -33,6 +33,13 @@ test('valid cart requests keep UPCs, quantities, PICKUP and accept Kroger 204', 
   assert.deepEqual(await (await POST(request({ action: 'cart', cartItems: [{ upc: '0001111041700', quantity: 2 }] }, true))).json(), { added: 1 });
 });
 
+test('a Kroger cart timeout is never automatically retried', async () => {
+  const fetcher = mock.method(globalThis, 'fetch', async () => new Response(null, { status: 524 }));
+  const response = await POST(request({ action: 'cart', cartItems: [{ upc: '0001111041700', quantity: 2 }] }, true));
+  assert.ok(response.status >= 400);
+  assert.equal(fetcher.mock.callCount(), 1);
+});
+
 test('invalid cart and catalog requests never reach Kroger', async () => {
   mock.method(globalThis, 'fetch', () => assert.fail('Unexpected network call'));
   assert.equal((await POST(request({ action: 'cart', cartItems: [] }))).status, 401);

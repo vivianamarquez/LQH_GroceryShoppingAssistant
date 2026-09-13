@@ -10,6 +10,7 @@ import {
   FlaskConical,
   LoaderCircle,
   Plus,
+  RotateCcw,
   ShoppingBasket,
   ShoppingCart,
   Sparkles,
@@ -18,6 +19,7 @@ import {
 import { KrogerCartDemo } from '@/components/kroger-cart-demo';
 import { TechnicalDetails } from '@/components/technical-details';
 import { LqhStatusIndicator } from '@/components/lqh-status-indicator';
+import { RequestProgress } from '@/components/request-progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -468,7 +470,7 @@ function ModelLab() {
             <ExampleChips onPick={setText} />
           </div>
           {error && (
-            <p className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p role="alert" className="mt-3 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}
             </p>
           )}
@@ -477,15 +479,12 @@ function ModelLab() {
             onClick={run}
             disabled={busy || !text.trim()}
           >
-            {busy ? <LoaderCircle className="animate-spin" /> : <Sparkles />}
-            {busy ? 'Working…' : 'Extract grocery list'}
-            {!busy && <ArrowRight />}
+            {busy ? <LoaderCircle className="animate-spin" /> : error ? <RotateCcw /> : <Sparkles />}
+            {busy ? 'Working…' : error ? 'Try again' : 'Extract grocery list'}
+            {!busy && !error && <ArrowRight />}
           </Button>
           {busy && (
-            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-muted-foreground">
-              <output>{progress}</output>
-              <button className="shrink-0 underline underline-offset-4" onClick={() => controller.current?.abort()}>Cancel</button>
-            </div>
+            <RequestProgress message={progress} onCancel={() => controller.current?.abort()} />
           )}
           <p className="mt-3 text-center text-xs text-muted-foreground">
             {models[model].size} · {models[model].note} ·{' '}
