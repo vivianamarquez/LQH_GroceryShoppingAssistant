@@ -32,16 +32,16 @@ test('route diagnostics survive and non-JSON gateway errors remain readable', as
   await assert.rejects(inferHosted('milk', () => {}), /HTTP 504/);
 });
 
-test('slow requests show a waiting notice and clear it after completion', async (t) => {
+test('startup guidance is conditional and does not change just because time passes', async (t) => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const progress: string[] = [];
   let finish!: (response: Response) => void;
   mock.method(globalThis, 'fetch', () => new Promise<Response>((resolve) => { finish = resolve; }));
   const pending = inferHosted('weather', message => progress.push(message));
   assert.equal(lqhStatus.getSnapshot(), 'waiting');
+  assert.deepEqual(progress, ['If the model needs to start up, the first response may take a few minutes.']);
   t.mock.timers.tick(10_000);
-  assert.match(progress.at(-1)!, /Still waiting/);
-  assert.doesNotMatch(progress.at(-1)!, /cold|warm|Retrying/);
+  assert.equal(progress.length, 1);
   finish(Response.json({ result: { error: 'not_a_grocery_request' } }));
   await pending;
   assert.equal(lqhStatus.getSnapshot(), 'responded');
@@ -85,7 +85,7 @@ test('server retry events are shown immediately, even across split chunks', asyn
   });
   const send = (chunk: string) => sender.enqueue(new TextEncoder().encode(chunk));
   send('{"type":"started"}\n{"type":"pro');
-  send('gress","message":"The model is taking longer than usual. Retrying once…"}\n');
+  send('gress","message":"No response yet. Retrying once…"}\n');
   await retrySeen;
   assert.equal(lqhStatus.getSnapshot(), 'waiting');
   t.mock.timers.tick(10_000);

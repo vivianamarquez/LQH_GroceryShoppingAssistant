@@ -112,7 +112,7 @@ export async function POST(request: Request) {
       };
       send({ type: 'started' });
       const response = await run(() => send({
-        type: 'progress', message: 'The model is taking longer than usual. Retrying once…',
+        type: 'progress', message: 'No response yet. Retrying once…',
       }));
       send({ type: response.ok ? 'result' : 'error', ...await response.json() });
       if (!disconnected.signal.aborted) controller.close();

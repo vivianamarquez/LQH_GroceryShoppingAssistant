@@ -37,25 +37,19 @@ async function readResult(response: Response, onProgress: (message: string) => v
 
 export async function inferHosted(text: string, onProgress: (message: string) => void, signal?: AbortSignal): Promise<GroceryResult> {
   const finish = lqhStatus.start();
-  const notice = setTimeout(() => onProgress('The model is taking longer than usual. Still waiting…'), 10_000);
   try {
-    onProgress('Running hosted LQH model…');
+    onProgress('If the model needs to start up, the first response may take a few minutes.');
     const response = await fetch('/api/infer', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/x-ndjson' },
       body: JSON.stringify({ text, model: 'tuned' }),
       signal,
     });
-    const result = await readResult(response, message => {
-      clearTimeout(notice);
-      onProgress(message);
-    });
+    const result = await readResult(response, onProgress);
     finish('responded');
     return result;
   } catch (error) {
     finish(signal?.aborted ? 'cancelled' : 'failed');
     throw error;
-  } finally {
-    clearTimeout(notice);
   }
 }

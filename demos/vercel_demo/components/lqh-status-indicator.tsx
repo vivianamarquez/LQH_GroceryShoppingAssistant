@@ -20,7 +20,7 @@ export function LqhStatusIndicator() {
       aria-live="polite"
       aria-atomic="true"
       title={description}
-      className="ml-auto flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-muted-foreground"
+      className="flex shrink-0 items-center gap-2 whitespace-nowrap text-xs text-muted-foreground"
     >
       <span aria-hidden="true" className={`size-1.5 rounded-full ${color}`} />
       <span><span className="font-medium">LQH</span> · {label}</span>

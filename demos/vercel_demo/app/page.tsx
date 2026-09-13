@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { KrogerCartDemo } from '@/components/kroger-cart-demo';
 import { TechnicalDetails } from '@/components/technical-details';
-import { LqhStatusIndicator } from '@/components/lqh-status-indicator';
 import { RequestProgress } from '@/components/request-progress';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -483,9 +482,7 @@ function ModelLab() {
             {busy ? 'Working…' : error ? 'Try again' : 'Extract grocery list'}
             {!busy && !error && <ArrowRight />}
           </Button>
-          {busy && (
-            <RequestProgress message={progress} onCancel={() => controller.current?.abort()} />
-          )}
+          <RequestProgress busy={busy} hosted={model === 'tuned'} message={progress} onCancel={() => controller.current?.abort()} />
           <p className="mt-3 text-center text-xs text-muted-foreground">
             {models[model].size} · {models[model].note} ·{' '}
             {model === 'base' && browserBackend && `${browserBackend} · `}
@@ -540,7 +537,6 @@ export default function Home() {
               <BookOpen className="hidden sm:block" /> About this app
             </TabsTrigger>
           </TabsList>
-          <LqhStatusIndicator />
         </div>
         <TabsContent value="kroger">
           <KrogerCartDemo />
