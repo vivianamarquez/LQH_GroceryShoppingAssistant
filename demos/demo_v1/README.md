@@ -24,7 +24,7 @@ On a Mac with [Homebrew](https://brew.sh/), install Node.js and [llama.cpp](http
 brew install node llama.cpp
 ```
 
-Copy the two model files listed above into the repository's `models/` directory (next to `demos/`, not inside this demo). These particular exports are **not included in the clone or downloaded by setup**. Ask the repository owner for them; a public download location has not been configured.
+Copy the two model files listed above into the repository's `models/` directory (next to `demos/`, not inside this demo). 
 
 Then, from the repository root:
 
