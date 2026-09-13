@@ -8,16 +8,13 @@ A React/TypeScript web app running on Vinext/Vite, with three tabs:
 
 ## Requirements
 
-- macOS with Bash (the setup below is tested on Apple Silicon). Other platforms need a compatible llama.cpp build; the launcher is not a native Windows script.
 - Node.js **22.13 or newer**, with npm.
 - A compatible `llama-server` executable from llama.cpp.
 - Both Q4 GGUF files in the repository-level `models/` folder:
   - `LFM2.5-1.2B-Instruct-Q4_K_M.gguf`
   - `grocery-list-v3-q4.gguf`
 
-Each model is about 731 MB on disk; running them requires additional memory. The model files, `.runtime/`, and `.env.local` are ignored by Git, so a fresh clone does not include them.
-
-**You do not need someone else's `.runtime/` folder.** Install llama.cpp on your own machine; the launcher can find `llama-server` on your `PATH`. It creates `.runtime/logs/` automatically. An existing local engine in `.runtime/llama/build/bin/` is still supported.
+Each model is about 731 MB on disk; running them requires additional memory. 
 
 ## First-time setup
 
