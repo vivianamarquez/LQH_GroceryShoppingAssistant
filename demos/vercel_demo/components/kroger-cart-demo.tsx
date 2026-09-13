@@ -22,6 +22,7 @@ import type {
   KrogerStore,
 } from '@/lib/kroger-types';
 import { packagePlan, type PackagePlan } from '@/lib/package-quantity';
+import { inferHosted } from '@/lib/hosted-inference';
 
 const examples = [
   ['Quick restock', '2 gallons of milk and a loaf of sourdough'],
@@ -65,6 +66,7 @@ export function KrogerCartDemo() {
   const [connected, setConnected] = useState<boolean>();
   const [connectionNotice, setConnectionNotice] = useState('');
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState('');
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
 
@@ -109,19 +111,13 @@ export function KrogerCartDemo() {
     setMatches([]);
     setSelected([]);
     try {
-      const inference = await json<{ result: GroceryResult }>(
-        await fetch('/api/infer', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, model: 'tuned' }),
-        }),
-      );
-      const groceryList = inference.result;
+      const groceryList = await inferHosted(text, setProgress);
       if ('error' in groceryList) {
         setList(groceryList);
         return;
       }
 
+      setProgress('Finding Kroger products…');
       const found = await json<{ store: KrogerStore; matches: KrogerMatch[] }>(
         await fetch('/api/kroger', {
           method: 'POST',
@@ -169,6 +165,7 @@ export function KrogerCartDemo() {
       );
     } finally {
       setBusy(false);
+      setProgress('');
     }
   }
 
@@ -347,9 +344,10 @@ export function KrogerCartDemo() {
               disabled={busy || adding || !text.trim() || zip.length !== 5}
             >
               {busy ? <LoaderCircle className="animate-spin" /> : <Search />}
-              {busy ? 'Matching products…' : 'Find Kroger products'}
+              {busy ? 'Working…' : 'Find Kroger products'}
             </Button>
           </div>
+          {busy && <output className="mt-3 block text-center text-xs text-muted-foreground">{progress}</output>}
           {error && (
             <p className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}

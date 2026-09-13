@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { KrogerCartDemo } from '@/components/kroger-cart-demo';
 import { TechnicalDetails } from '@/components/technical-details';
+import { LqhStatusIndicator } from '@/components/lqh-status-indicator';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,7 @@ import { Textarea } from '@/components/ui/textarea';
 import type { GroceryItem, GroceryResult } from '@/lib/grocery';
 import { starterList } from '@/lib/grocery';
 import { maxInputLength } from '@/lib/inference';
+import { inferHosted } from '@/lib/hosted-inference';
 
 const examples = [
   [
@@ -53,22 +55,12 @@ async function infer(text: string, model: Model, onProgress: (message: string) =
   const started = performance.now();
   if (model === 'base') {
     const { inferInBrowser } = await import('@/lib/browser-model');
-    return { result: await inferInBrowser(text, onProgress, signal), elapsed: performance.now() - started };
+    return { ...await inferInBrowser(text, onProgress, signal), elapsed: performance.now() - started };
   }
-  onProgress('Running hosted LQH model…');
-  const response = await fetch('/api/infer', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, model }),
-    signal,
-  });
-  const body = (await response.json()) as {
-    error?: string;
-    result?: GroceryResult;
-  };
-  if (!response.ok) throw new Error(body.error);
+  const result = await inferHosted(text, onProgress, signal);
   return {
-    result: body.result as GroceryResult,
+    result,
+    backend: 'LQH',
     elapsed: performance.now() - started,
   };
 }
@@ -369,6 +361,7 @@ function ModelLab() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState('');
+  const [browserBackend, setBrowserBackend] = useState('');
   const controller = useRef<AbortController | null>(null);
 
   useEffect(() => () => controller.current?.abort(), []);
@@ -385,6 +378,7 @@ function ModelLab() {
       setResult(response.result);
       setResultModel(model);
       setElapsed(response.elapsed);
+      if (model === 'base') setBrowserBackend(response.backend);
     } catch (reason) {
       setError(requestController.signal.aborted ? 'Request cancelled.' : reason instanceof Error ? reason.message : 'Inference failed.');
     } finally {
@@ -495,12 +489,12 @@ function ModelLab() {
           )}
           <p className="mt-3 text-center text-xs text-muted-foreground">
             {models[model].size} · {models[model].note} ·{' '}
+            {model === 'base' && browserBackend && `${browserBackend} · `}
             {model === 'tuned' ? 'no system prompt' : 'minimal system prompt'}
           </p>
           {model === 'base' && (
             <p className="mt-2 text-center text-xs leading-5 text-muted-foreground">
-              First run downloads about 731 MB, cached by your browser. No installation or key needed.
-              Use a recent desktop Chrome or Edge with enough free memory. First-run time includes loading.
+              First run downloads about 731 MB, cached by your browser.
             </p>
           )}
         </section>
@@ -522,30 +516,33 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background pt-5 text-foreground sm:pt-7">
       <Tabs defaultValue="kroger" className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
-        <TabsList
-          variant="line"
-          aria-label="Assistant views"
-          className="mb-5 w-full justify-start gap-2 border-b border-primary/15 p-0 group-data-horizontal/tabs:h-12"
-        >
-          <TabsTrigger
-            value="kroger"
-            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-primary/15 pb-2 sm:pb-0">
+          <TabsList
+            variant="line"
+            aria-label="Assistant views"
+            className="min-w-0 justify-start gap-2 p-0 group-data-horizontal/tabs:h-12"
           >
-            <ShoppingCart className="hidden sm:block" /> Kroger cart
-          </TabsTrigger>
-          <TabsTrigger
-            value="lab"
-            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
-          >
-            <FlaskConical className="hidden sm:block" /> Model lab
-          </TabsTrigger>
-          <TabsTrigger
-            value="technical"
-            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
-          >
-            <BookOpen className="hidden sm:block" /> About this app
-          </TabsTrigger>
-        </TabsList>
+            <TabsTrigger
+              value="kroger"
+              className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+            >
+              <ShoppingCart className="hidden sm:block" /> Kroger cart
+            </TabsTrigger>
+            <TabsTrigger
+              value="lab"
+              className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+            >
+              <FlaskConical className="hidden sm:block" /> Model lab
+            </TabsTrigger>
+            <TabsTrigger
+              value="technical"
+              className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+            >
+              <BookOpen className="hidden sm:block" /> About this app
+            </TabsTrigger>
+          </TabsList>
+          <LqhStatusIndicator />
+        </div>
         <TabsContent value="kroger">
           <KrogerCartDemo />
         </TabsContent>

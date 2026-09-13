@@ -264,7 +264,7 @@ export function TechnicalDetails() {
           />
         </div>
         <figcaption className="mt-3 px-2 text-center text-sm leading-6 text-muted-foreground">
-          <span className="font-medium text-foreground">Demo (local version):</span>{' '}
+          <span className="font-medium text-foreground">Demo:</span>{' '}
           Grocery request → product matches → Kroger cart.
         </figcaption>
       </figure>
