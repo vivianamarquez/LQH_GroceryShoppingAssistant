@@ -5,17 +5,34 @@ DEMO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BIN="${LLAMA_SERVER_BIN:-$DEMO_DIR/.runtime/llama/build/bin/llama-server}"
 MODELS="$DEMO_DIR/../../models"
 
+if [[ -z "${LLAMA_SERVER_BIN:-}" && ! -x "$BIN" ]]; then
+  BIN="$(command -v llama-server || true)"
+fi
+
+missing=0
 if [[ ! -x "$BIN" ]]; then
-  echo "llama-server not found. See $DEMO_DIR/README.md."
-  exit 1
+  echo "llama-server not found. Install llama.cpp (on macOS: brew install llama.cpp),"
+  echo "or set LLAMA_SERVER_BIN to its executable path. See $DEMO_DIR/README.md."
+  missing=1
 fi
 
 for model in grocery-list-v3-q4.gguf LFM2.5-1.2B-Instruct-Q4_K_M.gguf; do
   if [[ ! -r "$MODELS/$model" ]]; then
     echo "Model not found: $MODELS/$model. See $DEMO_DIR/README.md."
-    exit 1
+    missing=1
   fi
 done
+[[ "$missing" == 0 ]] || exit 1
+
+if [[ "${1:-}" == "--check" ]]; then
+  echo "Found llama-server and both Q4 models."
+  exit 0
+fi
+
+if [[ ! -d "$DEMO_DIR/node_modules" ]]; then
+  echo "App dependencies are missing. Run npm run setup in $DEMO_DIR first."
+  exit 1
+fi
 
 mkdir -p "$DEMO_DIR/.runtime/logs"
 "$BIN" -m "$MODELS/grocery-list-v3-q4.gguf" --port 8080 -ngl 99 -c 4096 > "$DEMO_DIR/.runtime/logs/tuned.log" 2>&1 &

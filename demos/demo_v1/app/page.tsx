@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-import QRCode from 'qrcode';
 import {
   ArrowRight,
   BookOpen,
@@ -12,7 +10,6 @@ import {
   FlaskConical,
   LoaderCircle,
   Plus,
-  Send,
   ShoppingBasket,
   ShoppingCart,
   Sparkles,
@@ -126,9 +123,6 @@ function ResultPanel({
 }) {
   const [view, setView] = useState<ResultView>('json');
   const [copied, setCopied] = useState(false);
-  const [handoff, setHandoff] = useState('');
-  const [url, setUrl] = useState('');
-  const [qr, setQr] = useState('');
 
   async function copy() {
     await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
@@ -164,33 +158,6 @@ function ResultPanel({
       ...data,
       line_items: [...data.line_items, { product: 'new item' }],
     });
-  }
-
-  async function sendToInstacart() {
-    setHandoff('Creating your shopping link…');
-    const response = await fetch('/api/instacart', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const body = (await response.json()) as { error?: string; url?: string };
-    if (!response.ok) {
-      setHandoff(body.error ?? 'Instacart rejected the list.');
-      return;
-    }
-    if (!body.url) {
-      setHandoff('Instacart did not return a shopping link.');
-      return;
-    }
-    setUrl(body.url);
-    setQr(
-      await QRCode.toDataURL(body.url, {
-        width: 220,
-        margin: 1,
-        color: { dark: '#07345b', light: '#ffffff' },
-      }),
-    );
-    setHandoff('Your list is ready.');
   }
 
   return (
@@ -245,7 +212,7 @@ function ResultPanel({
               </span>
               <p className="eyebrow mt-6">Not a grocery request</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight">
-                Nothing added—and that’s correct.
+                No grocery items found.
               </h2>
               <p className="mt-3 leading-7 text-muted-foreground">
                 The model recognized the failure case instead of inventing a
@@ -379,47 +346,6 @@ function ResultPanel({
                 <Plus /> Add an item
               </Button>
             </div>
-
-            <footer className="border-t bg-muted/35 p-5 sm:p-7">
-              <Button
-                className="h-12 w-full rounded-xl"
-                onClick={sendToInstacart}
-                disabled={!data.line_items.length}
-              >
-                <Send /> Shop this list on Instacart
-              </Button>
-              {handoff && (
-                <p className="mt-3 text-center text-sm text-muted-foreground">
-                  {handoff}
-                </p>
-              )}
-              {url && (
-                <div className="mt-5 flex flex-col items-center gap-4 rounded-2xl bg-white p-5 text-center sm:flex-row sm:text-left">
-                  <Image
-                    src={qr}
-                    alt="QR code for the Instacart shopping list"
-                    width={112}
-                    height={112}
-                    unoptimized
-                    className="size-28 rounded-xl"
-                  />
-                  <div>
-                    <p className="font-semibold">Open your shopping list</p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Scan with your phone or continue in this browser.
-                    </p>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-blue-800 hover:underline"
-                    >
-                      Continue to Instacart <ArrowRight className="size-3" />
-                    </a>
-                  </div>
-                </div>
-              )}
-            </footer>
           </>
         )}
       </TabsContent>
