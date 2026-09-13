@@ -491,23 +491,23 @@ function ModelLab() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-background pt-5 text-foreground sm:pt-7">
-      <Tabs defaultValue="lab" className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
+      <Tabs defaultValue="kroger" className="mx-auto max-w-7xl px-5 pb-12 sm:px-8">
         <TabsList
           variant="line"
           aria-label="Assistant views"
           className="mb-5 w-full justify-start gap-2 border-b border-primary/15 p-0 group-data-horizontal/tabs:h-12"
         >
           <TabsTrigger
-            value="lab"
-            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
-          >
-            <FlaskConical className="hidden sm:block" /> Model lab
-          </TabsTrigger>
-          <TabsTrigger
             value="kroger"
             className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
           >
             <ShoppingCart className="hidden sm:block" /> Kroger cart
+          </TabsTrigger>
+          <TabsTrigger
+            value="lab"
+            className="h-12 flex-none rounded-none border-0 px-2 font-semibold hover:text-primary data-active:text-primary after:bg-primary group-data-horizontal/tabs:after:bottom-[-1px] sm:px-4"
+          >
+            <FlaskConical className="hidden sm:block" /> Model lab
           </TabsTrigger>
           <TabsTrigger
             value="technical"
@@ -516,11 +516,11 @@ export default function Home() {
             <BookOpen className="hidden sm:block" /> About this app
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="lab">
-          <ModelLab />
-        </TabsContent>
         <TabsContent value="kroger">
           <KrogerCartDemo />
+        </TabsContent>
+        <TabsContent value="lab">
+          <ModelLab />
         </TabsContent>
         <TabsContent value="technical">
           <TechnicalDetails />

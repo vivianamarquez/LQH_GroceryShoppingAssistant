@@ -38,6 +38,17 @@ npm run demo
 
 On subsequent runs, use **`npm run demo`** from this folder. Rerun setup after pulling dependency changes.
 
+## Run the demo
+
+Open [http://localhost:3000](http://localhost:3000) and allow the models to finish loading before submitting a request.
+
+The launcher starts:
+
+| Service | Address |
+| --- | --- |
+| Web app | `http://localhost:3000` |
+| Fine-tuned model | `http://127.0.0.1:8080` |
+| Original Instruct model | `http://127.0.0.1:8082` |
 
 ## Connect Kroger (optional)
 
