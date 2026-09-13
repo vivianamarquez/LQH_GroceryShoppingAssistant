@@ -1,13 +1,9 @@
 # Grocery shopping assistant · Vercel demo
 
-The same three-tab demo as `../local_demo`, with two different inference paths:
-
 | Model | Where it runs |
 | --- | --- |
 | LQH tuned | Vercel calls `https://inference.lqh.ai/v1/chat/completions` with a server-only key. |
 | Original LFM2.5-1.2B-Instruct | wllama runs the Q4 GGUF in the visitor’s browser. |
-
-Kroger product search and OAuth stay server-side. Adding reviewed items sends the same UPC/quantity/PICKUP payload as the local demo, then opens Kroger in a new tab. This app never checks out or places an order.
 
 ## Run locally
 
