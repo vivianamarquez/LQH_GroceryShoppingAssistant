@@ -150,12 +150,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as {
+    const body = (await request.json().catch(() => null)) as {
       action?: 'search' | 'cart';
       zip?: string;
       items?: GroceryItem[];
       cartItems?: { upc: string; quantity: number }[];
-    };
+    } | null;
+
+    if (!body || typeof body !== 'object') {
+      return Response.json({ error: 'Provide a JSON request.' }, { status: 400 });
+    }
 
     if (body.action === 'search') {
       return Response.json(
@@ -171,20 +175,26 @@ export async function POST(request: Request) {
           { status: 401 },
         );
       }
-      const cartItems = (body.cartItems ?? [])
-        .filter((item) => /^\d{10,14}$/.test(item.upc))
-        .slice(0, 20)
-        .map((item) => ({
-          upc: item.upc,
-          quantity: Math.max(1, Math.ceil(item.quantity)),
-          modality: 'PICKUP',
-        }));
-      if (!cartItems.length) {
+      if (!Array.isArray(body.cartItems) || !body.cartItems.length) {
         return Response.json(
           { error: 'Choose at least one matched product.' },
           { status: 400 },
         );
       }
+      if (body.cartItems.length > 20 || body.cartItems.some((item) =>
+        !item || typeof item.upc !== 'string' || !/^\d{10,14}$/.test(item.upc) ||
+        !Number.isFinite(item.quantity) || item.quantity <= 0
+      )) {
+        return Response.json(
+          { error: 'Choose up to 20 valid products with positive quantities.' },
+          { status: 400 },
+        );
+      }
+      const cartItems = body.cartItems.map((item) => ({
+        upc: item.upc,
+        quantity: Math.max(1, Math.ceil(item.quantity)),
+        modality: 'PICKUP',
+      }));
 
       await krogerFetch('/cart/add', userToken, {
         method: 'PUT',

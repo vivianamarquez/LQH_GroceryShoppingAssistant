@@ -1,0 +1,19 @@
+{
+  "format_version": 1,
+  "source_events": 367,
+  "exported_events": 367,
+  "first_event": "2026-09-10T16:12:19.348341+00:00",
+  "last_event": "2026-09-11T21:50:28.706199+00:00",
+  "omitted_payloads": 28,
+  "tool_call_aliases": 173,
+  "identifier_aliases": 55,
+  "redactions": {
+    "known_private_values": 13,
+    "opaque_values": 9,
+    "identifiers": 123,
+    "urls_checked": 8,
+    "private_urls": 7,
+    "credential_prefixes": 2
+  },
+  "validation": "Known private values, token patterns, identifiers, signing parameters, personal paths, email addresses, and non-allowlisted URLs checked before writing."
+}

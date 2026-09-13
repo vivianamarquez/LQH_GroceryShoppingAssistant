@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "run_id": "49f54b33-7743-4546-b345-4720a458cd7d",
+  "name": "sft_grocery_v2_4",
+  "created_at": "2026-09-10T19:40:30+00:00",
+  "kind": "sft",
+  "state": "completed",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "spec_sha256_source": "submission",
+  "config_sha256": "0b5f7bc30c08af669af99e05e87ad97068a51cc60aaeca7f5dee5636df95142b",
+  "base_model": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "dataset": "datasets/grocery_list_v2_train_filtered/data.parquet",
+  "eval_dataset": "datasets/grocery_list_v2_eval_filtered/data.parquet",
+  "scorer": "evals/scorers/grocery_list_v1.md",
+  "training": {
+    "learning_rate": 0.0001,
+    "max_seq_length": 2048,
+    "per_device_batch_size": 49,
+    "gradient_accumulation_steps": 1,
+    "effective_batch_size": 49,
+    "auto_batch": true,
+    "auto_seq_length": true,
+    "num_epochs": 3,
+    "seed": 42
+  },
+  "num_samples": 1637,
+  "dataset_rows": {
+    "train": 1637,
+    "train_effective": 1637,
+    "eval": 167
+  },
+  "base_model_version_id": "e72e4a29-54fc-4388-9b99-c57b5d2fa6ac",
+  "base_model_revision": "0f604ada3f766f9f257460c4c9f0b5d6f69d431b",
+  "base_model_resolved": "LiquidAI/LFM2.5-1.2B-Instruct@0f604ada3f766f9f257460c4c9f0b5d6f69d431b",
+  "training_manifest": {
+    "recipe": "sft",
+    "base_model_version_id": "e72e4a29-54fc-4388-9b99-c57b5d2fa6ac",
+    "hyperparams": {
+      "learning_rate": 0.0001,
+      "max_seq_length": 2048,
+      "per_device_batch_size": 49,
+      "gradient_accumulation_steps": 1,
+      "effective_batch_size": 49,
+      "auto_batch": true,
+      "auto_seq_length": true,
+      "num_epochs": 3,
+      "seed": 42,
+      "lora": {
+        "enabled": true,
+        "r": 32,
+        "alpha": 64,
+        "dropout": 0.02,
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj",
+          "in_proj",
+          "out_proj",
+          "w1",
+          "w2",
+          "w3"
+        ]
+      }
+    },
+    "resolved": {
+      "base": "LiquidAI/LFM2.5-1.2B-Instruct@0f604ada3f766f9f257460c4c9f0b5d6f69d431b",
+      "datasets": [
+        {
+          "path": "datasets/grocery_list_v2_train_filtered/data.parquet",
+          "object_sha": "c7b02900872d0c6f79e65145bc9de4d0499e756775816a7da0b5d4a7e3a1dd32",
+          "dataset_object_id": "51aa58fb-41d5-42ec-b959-117d9c56614f"
+        }
+      ],
+      "eval_datasets": [
+        {
+          "path": "datasets/grocery_list_v2_eval_filtered/data.parquet",
+          "content_sha256": "9aca7421d156787086e1229d0fd2476e9646c06f1de4441b6ccab99f30176397"
+        }
+      ],
+      "scorer_sha": "e7f6702313b4fe08baa4220baeee79775baafa9e325eceddacd0cba05e4f3602",
+      "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878"
+    },
+    "recipe_sha": "21818ad4ecc708a5168308a1f927b3235fad4648ef93f078f9dcc17b9e2272a7",
+    "datamix_version_id": "6c4db301-5ce8-4f54-b5e7-2511f908e0c1",
+    "hygiene_report_id": "29c0ef86-cdf7-4116-94b8-2357c1f9708b",
+    "config_sha": "3b724ede90724c0249399468e4b469f4b1fa06b7f62c8108c283925975f853c9",
+    "base": {
+      "kind": "hub",
+      "hub_id": "LiquidAI/LFM2.5-1.2B-Instruct",
+      "revision": "0f604ada3f766f9f257460c4c9f0b5d6f69d431b",
+      "model_version_id": "e72e4a29-54fc-4388-9b99-c57b5d2fa6ac",
+      "display": "LiquidAI/LFM2.5-1.2B-Instruct@0f604ada3f76",
+      "checkpoint_artifact_id": null
+    }
+  },
+  "datamix_version_id": "6c4db301-5ce8-4f54-b5e7-2511f908e0c1",
+  "final_metrics": {
+    "step": 105,
+    "epoch": 3
+  }
+}

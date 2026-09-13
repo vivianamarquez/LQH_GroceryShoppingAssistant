@@ -101,8 +101,13 @@ export function KrogerCartDemo() {
   }, []);
 
   async function buildCart() {
+    if (busy || adding) return;
     setBusy(true);
     setError('');
+    setList(undefined);
+    setStore(undefined);
+    setMatches([]);
+    setSelected([]);
     try {
       const inference = await json<{ result: GroceryResult }>(
         await fetch('/api/infer', {
@@ -112,10 +117,8 @@ export function KrogerCartDemo() {
         }),
       );
       const groceryList = inference.result;
-      setList(groceryList);
       if ('error' in groceryList) {
-        setMatches([]);
-        setStore(undefined);
+        setList(groceryList);
         return;
       }
 
@@ -154,6 +157,7 @@ export function KrogerCartDemo() {
           options,
         };
       });
+      setList(groceryList);
       setStore(found.store);
       setMatches(displayMatches);
       setSelected(
@@ -178,7 +182,7 @@ export function KrogerCartDemo() {
   }
 
   async function addToCart() {
-    if (adding) return;
+    if (adding || busy) return;
     setAdding(true);
     setError('');
     // Reserve the tab during the click so the browser allows it.
@@ -282,9 +286,10 @@ export function KrogerCartDemo() {
                         : 'Connect account'}
                   </span>
                 </Button>
-                <label className="flex h-9 items-center gap-2 rounded-lg bg-white/5 px-3 text-sm text-white/65 ring-1 ring-inset ring-white/15 focus-within:ring-white/40">
+                <label htmlFor="kroger-zip" className="flex h-9 items-center gap-2 rounded-lg bg-white/5 px-3 text-sm text-white/65 ring-1 ring-inset ring-white/15 focus-within:ring-white/40">
                   ZIP
                   <Input
+                    id="kroger-zip"
                     value={zip}
                     onChange={(event) =>
                       setZip(event.target.value.replace(/\D/g, '').slice(0, 5))
@@ -297,7 +302,7 @@ export function KrogerCartDemo() {
                 </label>
               </div>
               {connectionNotice && (
-                <p className="mt-3 text-sm leading-6 text-white/75" role="status">{connectionNotice}</p>
+                <output className="mt-3 block text-sm leading-6 text-white/75">{connectionNotice}</output>
               )}
             </div>
           </div>
@@ -318,6 +323,7 @@ export function KrogerCartDemo() {
             </Badge>
           </div>
           <Textarea
+            aria-label="Grocery request"
             value={text}
             onChange={(event) => setText(event.target.value)}
             placeholder="Try: add milk, eggs, and bananas"
@@ -338,7 +344,7 @@ export function KrogerCartDemo() {
             <Button
               className="h-11 flex-1 rounded-xl"
               onClick={buildCart}
-              disabled={busy || !text.trim() || zip.length !== 5}
+              disabled={busy || adding || !text.trim() || zip.length !== 5}
             >
               {busy ? <LoaderCircle className="animate-spin" /> : <Search />}
               {busy ? 'Matching products…' : 'Find Kroger products'}
@@ -497,7 +503,7 @@ export function KrogerCartDemo() {
                 <Button
                   className="h-12 w-full rounded-xl"
                   onClick={addToCart}
-                  disabled={adding || !connected || !matchedCount}
+                  disabled={adding || busy || !connected || !matchedCount}
                 >
                   {adding ? (
                     <LoaderCircle className="animate-spin" />

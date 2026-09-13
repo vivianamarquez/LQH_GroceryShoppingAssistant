@@ -1,0 +1,9 @@
+{
+  "job_id": "72469dc4-bcee-4128-be96-658763db3793",
+  "remote_name": "cloud",
+  "remote_run_dir": "cloud:72469dc4-bcee-4128-be96-658763db3793",
+  "module": "lqh.remote.data_gen",
+  "kind": "data_gen",
+  "backend": "cloud",
+  "owner_project_id": "75e54968-cb78-428c-9278-493bf2b61ba3"
+}

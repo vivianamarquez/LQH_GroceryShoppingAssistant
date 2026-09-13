@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "run_id": "702f3a15-e04d-4cbe-9d1c-c63508420211",
+  "name": "baseline_pool_medium",
+  "created_at": "2026-09-10T17:16:11+00:00",
+  "kind": "",
+  "state": "completed",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "spec_sha256_source": "submission",
+  "config_sha256": "7c389e3ab16c",
+  "eval_dataset": "datasets/grocery_list_v2_eval_filtered",
+  "scorer": "evals/scorers/grocery_list_v1.md",
+  "inference_model": "medium",
+  "result_summary": {
+    "scores": {
+      "mean": 8.51,
+      "median": 9.0,
+      "std": 1.7,
+      "min": 0.0,
+      "max": 10.0
+    },
+    "num_samples": 167,
+    "num_scored": 164,
+    "num_failed": 3
+  }
+}

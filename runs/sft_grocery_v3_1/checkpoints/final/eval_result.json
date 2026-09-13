@@ -1,0 +1,46 @@
+{
+  "num_scored": 165,
+  "num_failed": 2,
+  "scores": {
+    "mean": 6.43,
+    "median": 6.0
+  },
+  "scores_weighted_mean": 6.43,
+  "per_source": {
+    "grocery_list_v2_eval_filtered": {
+      "num_scored": 165,
+      "num_attempted": 167,
+      "num_failed": 2,
+      "scores": {
+        "mean": 6.43,
+        "median": 6.0,
+        "std": 2.58,
+        "min": 2.0,
+        "max": 10.0
+      }
+    }
+  },
+  "score_distribution": {
+    "n": 165,
+    "percentiles": {
+      "p10": 4.0,
+      "p25": 4.0,
+      "p50": 6.0,
+      "p75": 9.0,
+      "p90": 10.0
+    },
+    "histogram": {
+      "0": 0,
+      "1": 0,
+      "2": 2,
+      "3": 6,
+      "4": 68,
+      "5": 2,
+      "6": 8,
+      "7": 8,
+      "8": 9,
+      "9": 39,
+      "10": 23
+    }
+  }
+}

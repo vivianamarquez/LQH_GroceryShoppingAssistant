@@ -84,6 +84,7 @@ function ModelToggle({
       {(Object.keys(models) as Model[]).map((id) => (
         <button
           key={id}
+          aria-pressed={value === id}
           onClick={() => onChange(id)}
           className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${value === id ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
         >
@@ -428,6 +429,7 @@ function ResultPanel({
 
 function ModelLab() {
   const [model, setModel] = useState<Model>('tuned');
+  const [resultModel, setResultModel] = useState<Model>('tuned');
   const [text, setText] = useState(examples[0][1]);
   const [result, setResult] = useState<GroceryResult>(starterList);
   const [elapsed, setElapsed] = useState<number>();
@@ -440,6 +442,7 @@ function ModelLab() {
     try {
       const response = await infer(text, model);
       setResult(response.result);
+      setResultModel(model);
       setElapsed(response.elapsed);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Inference failed.');
@@ -517,6 +520,7 @@ function ModelLab() {
             <ModelToggle value={model} onChange={setModel} />
           </div>
           <Textarea
+            aria-label="Grocery request"
             value={text}
             onChange={(event) => setText(event.target.value)}
             placeholder="Try: add milk, eggs, and two bunches of bananas"
@@ -549,7 +553,7 @@ function ModelLab() {
           key={elapsed ?? 'initial'}
           data={result}
           onChange={setResult}
-          model={model}
+          model={resultModel}
           elapsed={elapsed}
         />
       </div>

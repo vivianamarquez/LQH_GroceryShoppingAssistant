@@ -1,0 +1,125 @@
+{
+  "type": "eval_hf",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "training_method": "lora",
+  "eval_dataset": "datasets/grocery_list_v2_eval_filtered/data.parquet",
+  "scorer": "evals/scorers/grocery_list_v1.md",
+  "judge_size": "medium",
+  "max_new_tokens": 4096,
+  "timeout_minutes": 120,
+  "num_samples": 167,
+  "manifest": [
+    "eval_dataset",
+    "scorer"
+  ],
+  "checkpoint_artifact_id": "3c052515-563c-4ad6-aa61-2116b4b3fa2a",
+  "base_model": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "response_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "grocery_list",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "line_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "string"
+                    },
+                    "line_item_measurements": {
+                      "type": "object",
+                      "properties": {
+                        "quantity": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "quantity",
+                        "unit"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "filters": {
+                      "type": "object",
+                      "properties": {
+                        "brand_filters": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "brand": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "brand"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "health_filters": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "label"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "product"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "title",
+              "line_items"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "enum": [
+                  "not_a_grocery_request"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  }
+}

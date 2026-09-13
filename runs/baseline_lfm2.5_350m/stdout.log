@@ -1,0 +1,45 @@
+==========
+== CUDA ==
+==========
+CUDA Version 13.0.3
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+launcher: context job_id=bcfd7d79-da54-4c9c-a886-85e5f694fd05 user_id=4e70c321-e5c6-4f8e-bf2c-32d9c2fad6bb kind=eval_hf project_id=75e54968-cb78-428c-9278-493bf2b61ba3
+launcher: downloading bundle ...
+launcher: bundle ready under /workspace/runs/bcfd7d79-da54-4c9c-a886-85e5f694fd05/inputs
+launcher: starting lqh.infer.eval_hf
+eval_hf: engine=sglang protocol=b608178a68c7 judge=judge:pin:jp-6cb78b8a48f9 lineage=off
+Loading dataset: datasets/grocery_list_v2_eval_filtered/data.parquet
+Starting sglang server: /usr/bin/python -m sglang.launch_server --model-path hf_checkpoints/LiquidAI__LFM2.5-350M@main --host 127.0.0.1 --port 30000 --served-model-name lqh-eval --tool-call-parser lfm2
+sandbox still running; no output for 1m18s
+sglang server healthy
+Generating 167/167 samples (concurrency 8, greedy, max_tokens 4096, JSON-schema constrained)
+  10/167 samples done
+  20/167 samples done
+  30/167 samples done
+  40/167 samples done
+  50/167 samples done
+  60/167 samples done
+  70/167 samples done
+  80/167 samples done
+  90/167 samples done
+  100/167 samples done
+  110/167 samples done
+  120/167 samples done
+  130/167 samples done
+  140/167 samples done
+  150/167 samples done
+  160/167 samples done
+  167/167 samples done
+Inference complete: 167 predictions written
+eval_hf: starting inline scoring step
+sandbox still running; no output for 46s
+eval_hf: decoding protocol = json_schema
+eval_hf: inline scoring summary keys=['num_failed', 'num_scored', 'per_source', 'score_distribution', 'scores', 'scores_weighted_mean']
+eval_hf: real_metric stamped (mean=3.140, n=166)
+launcher: trainer exited with code 0
+launcher: publishing artifacts ...
+launcher: cleaning up volume (publish ok)

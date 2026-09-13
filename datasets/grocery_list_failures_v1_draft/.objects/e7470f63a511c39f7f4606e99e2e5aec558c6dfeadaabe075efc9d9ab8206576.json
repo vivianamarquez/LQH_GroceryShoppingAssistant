@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "object_sha": "e7470f63a511c39f7f4606e99e2e5aec558c6dfeadaabe075efc9d9ab8206576",
+  "name": "grocery_list_failures_v1_draft",
+  "created_at": "2026-09-10T19:57:48+00:00",
+  "purpose": "inspection",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "rows": 20,
+  "columns": [
+    "messages",
+    "audio",
+    "tools"
+  ],
+  "files": [
+    "data.parquet"
+  ],
+  "content_sha256": "d603f244fd9ebb0c08c129e378f0b2da43d9c2df25f9095c08a5264769e4a15a",
+  "pipeline_path": "data_gen/grocery_list_failures_v1.py",
+  "pipeline_hash": "1eb8eed4630b482330f4a13bad28ed0ffc94de94f04814e5716d1596d729c771"
+}

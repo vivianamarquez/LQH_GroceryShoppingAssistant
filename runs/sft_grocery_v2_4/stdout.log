@@ -1,0 +1,73 @@
+launcher: context job_id=deb9bc78-89e8-4b49-8a0e-beab280c1933 user_id=4e70c321-e5c6-4f8e-bf2c-32d9c2fad6bb kind=train_sft project_id=75e54968-cb78-428c-9278-493bf2b61ba3
+launcher: downloading bundle ...
+launcher: bundle ready under /workspace/runs/deb9bc78-89e8-4b49-8a0e-beab280c1933/inputs
+launcher: starting lqh.train
+lqh 0.20.0 · image im-oAiHV6qCeYN8Qt5BI8kLEl
+Loading model: LiquidAI/LFM2.5-1.2B-Instruct (modality=text)
+GPUs available: 1
+  GPU 0: NVIDIA L4
+Loading dataset: datasets/grocery_list_v2_train_filtered/data.parquet
+Loading explicit eval_dataset: grocery_list_v2_eval_filtered(167)
+  train=1637 eval=167 (eval_dataset=explicit)
+  sequence length: 1024 (longest row 2 tokens; submitted estimate 2048)
+  skipped 1 train / 0 eval conversations whose assistant turn starts past the training limit (1024 tokens): nothing to learn from them
+calibrate: cached micro_batch=8 grad_accum=6 (effective 48, requested 49, gpu=L4)
+  optimizer steps: ~105 (1636 rows x 3 epochs / effective batch 48)
+Starting training...
+{'loss': '0.7205', 'grad_norm': '1.318', 'learning_rate': '5e-05', 'entropy': '0.3941', 'num_tokens': '7.324e+04', 'mean_token_accuracy': '0.8611', 'epoch': '0.1756'}
+sandbox still running; no output for 0s
+{'loss': '0.3046', 'grad_norm': '0.5866', 'learning_rate': '9.895e-05', 'entropy': '0.3878', 'num_tokens': '1.465e+05', 'mean_token_accuracy': '0.9291', 'epoch': '0.3512'}
+{'loss': '0.1082', 'grad_norm': '0.3888', 'learning_rate': '9.263e-05', 'entropy': '0.09001', 'num_tokens': '2.181e+05', 'mean_token_accuracy': '0.9735', 'epoch': '0.5268'}
+sandbox still running; no output for 3s
+{'loss': '0.075', 'grad_norm': '0.2441', 'learning_rate': '8.632e-05', 'entropy': '0.07759', 'num_tokens': '2.909e+05', 'mean_token_accuracy': '0.9813', 'epoch': '0.7024'}
+{'loss': '0.07498', 'grad_norm': '0.2069', 'learning_rate': '8e-05', 'entropy': '0.0791', 'num_tokens': '3.647e+05', 'mean_token_accuracy': '0.981', 'epoch': '0.878'}
+{'loss': '0.08035', 'grad_norm': '0.1823', 'learning_rate': '7.368e-05', 'entropy': '0.07225', 'num_tokens': '4.274e+05', 'mean_token_accuracy': '0.9831', 'epoch': '1.029'}
+sandbox still running; no output for 5s
+{'loss': '0.05398', 'grad_norm': '0.1651', 'learning_rate': '6.737e-05', 'entropy': '0.06634', 'num_tokens': '5.044e+05', 'mean_token_accuracy': '0.9863', 'epoch': '1.205'}
+{'loss': '0.05288', 'grad_norm': '0.1473', 'learning_rate': '6.105e-05', 'entropy': '0.05912', 'num_tokens': '5.757e+05', 'mean_token_accuracy': '0.9865', 'epoch': '1.38'}
+{'eval_loss': '0.06215', 'eval_runtime': '7.318', 'eval_samples_per_second': '22.82', 'eval_steps_per_second': '2.87', 'eval_entropy': '0.05902', 'eval_num_tokens': '6.004e+05', 'eval_mean_token_accuracy': '0.9849', 'epoch': '1.439'}
+  checkpoint eval (step_50): generating over 24 of 167 eval rows (the final eval uses all of them)
+  checkpoint eval (step_50): JSON-schema constrained decoding enabled
+sandbox still running; no output for 2s
+sandbox still running; no output for 5s
+{'loss': '0.0543', 'grad_norm': '0.1545', 'learning_rate': '5.474e-05', 'entropy': '0.05507', 'num_tokens': '6.476e+05', 'mean_token_accuracy': '0.9861', 'epoch': '1.556'}
+sandbox still running; no output for 2s
+{'loss': '0.05255', 'grad_norm': '0.1583', 'learning_rate': '4.842e-05', 'entropy': '0.05203', 'num_tokens': '7.207e+05', 'mean_token_accuracy': '0.9868', 'epoch': '1.732'}
+{'loss': '0.04966', 'grad_norm': '0.1638', 'learning_rate': '4.211e-05', 'entropy': '0.05348', 'num_tokens': '7.927e+05', 'mean_token_accuracy': '0.9874', 'epoch': '1.907'}
+{'loss': '0.04108', 'grad_norm': '0.1274', 'learning_rate': '3.579e-05', 'entropy': '0.04842', 'num_tokens': '8.535e+05', 'mean_token_accuracy': '0.9894', 'epoch': '2.059'}
+sandbox still running; no output for 7s
+{'loss': '0.04405', 'grad_norm': '0.1509', 'learning_rate': '2.947e-05', 'entropy': '0.04782', 'num_tokens': '9.253e+05', 'mean_token_accuracy': '0.9886', 'epoch': '2.234'}
+{'loss': '0.04683', 'grad_norm': '0.1324', 'learning_rate': '2.316e-05', 'entropy': '0.05156', 'num_tokens': '9.991e+05', 'mean_token_accuracy': '0.9884', 'epoch': '2.41'}
+{'loss': '0.04502', 'grad_norm': '0.1324', 'learning_rate': '1.684e-05', 'entropy': '0.04999', 'num_tokens': '1.067e+06', 'mean_token_accuracy': '0.9882', 'epoch': '2.585'}
+sandbox still running; no output for 5s
+{'loss': '0.04047', 'grad_norm': '0.1395', 'learning_rate': '1.053e-05', 'entropy': '0.04779', 'num_tokens': '1.143e+06', 'mean_token_accuracy': '0.9893', 'epoch': '2.761'}
+{'eval_loss': '0.05694', 'eval_runtime': '7.31', 'eval_samples_per_second': '22.85', 'eval_steps_per_second': '2.873', 'eval_entropy': '0.05389', 'eval_num_tokens': '1.194e+06', 'eval_mean_token_accuracy': '0.986', 'epoch': '2.878'}
+  checkpoint eval (step_100): generating over 24 of 167 eval rows (the final eval uses all of them)
+  checkpoint eval (step_100): JSON-schema constrained decoding enabled
+sandbox still running; no output for 8s
+sandbox still running; no output for 7s
+{'loss': '0.04199', 'grad_norm': '0.1619', 'learning_rate': '4.211e-06', 'entropy': '0.04925', 'num_tokens': '1.219e+06', 'mean_token_accuracy': '0.9892', 'epoch': '2.937'}
+{'eval_loss': '0.05686', 'eval_runtime': '7.233', 'eval_samples_per_second': '23.09', 'eval_steps_per_second': '2.903', 'eval_entropy': '0.05358', 'eval_num_tokens': '1.244e+06', 'eval_mean_token_accuracy': '0.986', 'epoch': '3'}
+  checkpoint eval (step_105): generating over 24 of 167 eval rows (the final eval uses all of them)
+  checkpoint eval (step_105): JSON-schema constrained decoding enabled
+sandbox still running; no output for 1s
+sandbox still running; no output for 10s
+{'train_runtime': '1426', 'train_samples_per_second': '3.443', 'train_steps_per_second': '0.074', 'train_loss': '0.1091', 'epoch': '3'}
+Final eval: eval_loss=0.05685675889253616
+Model saved to model-lora
+  adapter applied: 92/92 lora_B modules carry trained weights (base: LiquidAI/LFM2.5-1.2B-Instruct; transformers 5.16.1, peft 0.20.0, torch 2.13.0)
+  checkpoint eval (final): JSON-schema constrained decoding enabled
+sandbox still running; no output for 1s
+sandbox still running; no output for 0s
+sandbox still running; no output for 3s
+sandbox still running; no output for 0s
+sandbox still running; no output for 2s
+sandbox still running; no output for 5s
+sandbox still running; no output for 1s
+sandbox still running; no output for 3s
+sandbox still running; no output for 1m10s
+Training completed.
+launcher: trainer exited with code 0
+launcher: publishing artifacts ...
+sandbox still running; no output for 10s
+launcher: cleaning up volume (publish ok)

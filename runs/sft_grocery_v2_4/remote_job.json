@@ -1,0 +1,9 @@
+{
+  "job_id": "deb9bc78-89e8-4b49-8a0e-beab280c1933",
+  "remote_name": "cloud",
+  "remote_run_dir": "cloud:deb9bc78-89e8-4b49-8a0e-beab280c1933",
+  "module": "lqh.train",
+  "kind": "train_sft",
+  "backend": "cloud",
+  "owner_project_id": "75e54968-cb78-428c-9278-493bf2b61ba3"
+}

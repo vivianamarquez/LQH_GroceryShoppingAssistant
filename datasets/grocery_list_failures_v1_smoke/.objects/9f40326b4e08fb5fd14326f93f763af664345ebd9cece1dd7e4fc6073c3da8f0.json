@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "object_sha": "9f40326b4e08fb5fd14326f93f763af664345ebd9cece1dd7e4fc6073c3da8f0",
+  "name": "grocery_list_failures_v1_smoke",
+  "created_at": "2026-09-10T19:56:23+00:00",
+  "purpose": "smoke",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "rows": 3,
+  "columns": [
+    "messages",
+    "audio",
+    "tools"
+  ],
+  "files": [
+    "data.parquet"
+  ],
+  "content_sha256": "2e6dd15a0f9dcd0e2ba9099e6db3a6de891c113cca8c044216a9ab6bb68d9bdb",
+  "pipeline_path": "data_gen/grocery_list_failures_v1.py",
+  "pipeline_hash": "1eb8eed4630b482330f4a13bad28ed0ffc94de94f04814e5716d1596d729c771"
+}

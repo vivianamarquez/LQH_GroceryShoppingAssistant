@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "dataset_id": "83d3d8df-5350-4fa8-a2a4-c9c36329bd9d",
+  "version": 1,
+  "name": "grocery_list_v2_train_raw",
+  "created_at": "2026-09-10T17:36:36+00:00",
+  "purpose": "training",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "rows": 2000,
+  "content_sha256": "97d4bd3894b160c476534595451de14edc69bcc87d930bcecea6190ea9828eca",
+  "pipeline_path": "data_gen/grocery_list_v1.py",
+  "pipeline_hash": "f68bce1b2625",
+  "run_name": "data_gen_grocery_list_v2_train_raw_20260910_172345_0401f6",
+  "job_id": "04bfb443-a7ab-4256-8572-59c20c6794b1",
+  "cloud_artifact_id": "1b66141f-3ea8-421b-bec9-3886f6fac08e"
+}

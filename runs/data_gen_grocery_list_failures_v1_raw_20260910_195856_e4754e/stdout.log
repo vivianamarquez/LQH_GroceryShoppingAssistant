@@ -1,0 +1,10 @@
+launcher: context job_id=72469dc4-bcee-4128-be96-658763db3793 user_id=4e70c321-e5c6-4f8e-bf2c-32d9c2fad6bb kind=data_gen project_id=75e54968-cb78-428c-9278-493bf2b61ba3
+launcher: downloading bundle ...
+launcher: bundle ready under /workspace/runs/72469dc4-bcee-4128-be96-658763db3793/inputs
+launcher: starting lqh.remote.data_gen
+sandbox still running; no output for 0s
+sandbox still running; no output for 3s
+data_gen: 600/600 samples succeeded
+launcher: trainer exited with code 0
+launcher: publishing artifacts ...
+launcher: cleaning up volume (publish ok)

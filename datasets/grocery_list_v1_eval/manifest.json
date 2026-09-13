@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "dataset_id": "1246e8b1-34dc-4d4c-9c4c-e431861a4ed4",
+  "version": 1,
+  "name": "grocery_list_v1_eval",
+  "created_at": "2026-09-10T16:59:39+00:00",
+  "purpose": "validation",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "rows": 200,
+  "content_sha256": "0dc17c3bde589dfb1d6ba24a5d96544ca03adc0141bab572f81cc8036e38e04f",
+  "pipeline_path": "data_gen/grocery_list_v1.py",
+  "pipeline_hash": "03491be8813f",
+  "scored_by": "evals/scorers/grocery_list_v1.md",
+  "scored_at": "2026-09-10T17:01:41+00:00",
+  "score_mean": 8.41
+}

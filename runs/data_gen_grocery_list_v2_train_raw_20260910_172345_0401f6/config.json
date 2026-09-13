@@ -1,0 +1,19 @@
+{
+  "kind": "data_gen",
+  "type": "data_gen",
+  "script_path": "data_gen/grocery_list_v1.py",
+  "num_samples": 2000,
+  "samples_per_item": 1,
+  "concurrency": 100,
+  "output_dataset": "grocery_list_v2_train_raw",
+  "validation_instructions": null,
+  "source_paths": [],
+  "manifest": [
+    "script_path",
+    "validation_instructions",
+    "source_paths"
+  ],
+  "needs_hf": false,
+  "timeout_minutes": 720,
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878"
+}

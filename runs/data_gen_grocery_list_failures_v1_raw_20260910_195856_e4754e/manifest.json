@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "run_id": "c1800050-1abb-4b42-9f67-0b1a6a13373a",
+  "name": "data_gen_grocery_list_failures_v1_raw_20260910_195856_e4754e",
+  "created_at": "2026-09-10T20:04:58+00:00",
+  "kind": "data_gen",
+  "state": "completed",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "spec_sha256_source": "submission",
+  "config_sha256": "1be50b18f8459a8fa1e47fb3298da3e87f694336e6f194071419cddc0da36c1a",
+  "num_samples": 600
+}

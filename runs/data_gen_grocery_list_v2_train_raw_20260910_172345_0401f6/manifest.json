@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "run_id": "29692b74-0cda-4454-bb32-5bdd7e3707f0",
+  "name": "data_gen_grocery_list_v2_train_raw_20260910_172345_0401f6",
+  "created_at": "2026-09-10T17:36:36+00:00",
+  "kind": "data_gen",
+  "state": "completed",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "spec_sha256_source": "submission",
+  "config_sha256": "0463174ff0a6",
+  "num_samples": 2000
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "name": "grocery_list_v2_train_filtered",
+  "channel": "grocery_list_v2_train_filtered",
+  "current": {
+    "object_sha": "c7b02900872d0c6f79e65145bc9de4d0499e756775816a7da0b5d4a7e3a1dd32",
+    "dataset_object_id": "51aa58fb-41d5-42ec-b959-117d9c56614f"
+  },
+  "history": [],
+  "updated_at": "2026-09-10T18:55:30+00:00"
+}

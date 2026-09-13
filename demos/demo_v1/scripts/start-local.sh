@@ -10,6 +10,13 @@ if [[ ! -x "$BIN" ]]; then
   exit 1
 fi
 
+for model in grocery-list-v3-q4.gguf LFM2.5-1.2B-Instruct-Q4_K_M.gguf; do
+  if [[ ! -r "$MODELS/$model" ]]; then
+    echo "Model not found: $MODELS/$model. See $DEMO_DIR/README.md."
+    exit 1
+  fi
+done
+
 mkdir -p "$DEMO_DIR/.runtime/logs"
 "$BIN" -m "$MODELS/grocery-list-v3-q4.gguf" --port 8080 -ngl 99 -c 4096 > "$DEMO_DIR/.runtime/logs/tuned.log" 2>&1 &
 TUNED_PID=$!

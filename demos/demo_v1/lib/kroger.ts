@@ -102,7 +102,12 @@ export async function krogerFetch<T>(
     headers,
   });
   const text = await response.text();
-  const data = text ? (JSON.parse(text) as Record<string, unknown>) : undefined;
+  let data: Record<string, unknown> | undefined;
+  try {
+    data = text ? JSON.parse(text) : undefined;
+  } catch {
+    throw new Error(`Kroger returned ${response.status} with an unexpected response.`);
+  }
 
   if (path === '/cart/add') {
     console.info('[kroger cart]', {
@@ -134,7 +139,11 @@ export function readCookie(request: Request, name: string) {
     .split(';')
     .map((part) => part.trim().split('='))
     .find(([key]) => key === name)?.[1];
-  return value ? decodeURIComponent(value) : undefined;
+  try {
+    return value ? decodeURIComponent(value) : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export function cookie(

@@ -1,0 +1,16 @@
+{
+  "input": "/Users/viviana.marquez/Desktop/repos/lqh_instacart/datasets/grocery_list_v2_train_raw/data.parquet",
+  "scorer": "/Users/viviana.marquez/Desktop/repos/lqh_instacart/evals/scorers/grocery_list_v1.md",
+  "threshold": 7,
+  "total": 2000,
+  "scored": 1934,
+  "kept": 1637,
+  "kept_unjudged": 66,
+  "dropped": 363,
+  "failed": 66,
+  "keep_rate": 0.8185,
+  "mean_score": 8.68,
+  "scoring_model": "judge:medium",
+  "scoring_model_size": "medium",
+  "timestamp": "2026-09-10T17:41:14Z"
+}

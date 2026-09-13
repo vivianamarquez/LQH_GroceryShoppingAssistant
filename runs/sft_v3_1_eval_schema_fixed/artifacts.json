@@ -1,0 +1,53 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "cafa6be2-c8fd-4131-9c63-fdca0ee0ed29",
+      "kind": "metrics",
+      "relpath": "progress.jsonl",
+      "timestamp": "2026-09-10T21:30:54.359042Z"
+    },
+    {
+      "artifact_id": "a90edc71-6e3d-4bb8-9868-516c9aa21508",
+      "kind": "eval_result",
+      "relpath": "eval_request.json",
+      "timestamp": "2026-09-10T21:30:55.569469Z"
+    },
+    {
+      "artifact_id": "5e145c0f-354f-49a5-8e2b-471a9ce328b0",
+      "kind": "eval_result",
+      "relpath": "eval_result.json",
+      "timestamp": "2026-09-10T21:30:56.19681Z"
+    },
+    {
+      "artifact_id": "9bbbdf01-8999-4416-8d0a-22792d39dce7",
+      "kind": "predictions",
+      "relpath": "results.parquet",
+      "timestamp": "2026-09-10T21:30:57.107574Z"
+    },
+    {
+      "artifact_id": "977077a7-ddf5-4824-9779-abe017bbd2d0",
+      "kind": "predictions",
+      "relpath": "predictions.parquet",
+      "timestamp": "2026-09-10T21:30:57.877349Z"
+    },
+    {
+      "artifact_id": "975a7484-a020-44bd-be4c-e12c85b943f1",
+      "kind": "other",
+      "relpath": "config.json",
+      "timestamp": "2026-09-10T21:30:58.82977Z"
+    },
+    {
+      "artifact_id": "5e82fbc2-3d6f-4654-aea5-08753a76430a",
+      "kind": "logs",
+      "relpath": "logs/stdout.log",
+      "timestamp": "2026-09-10T21:30:59.548551Z"
+    },
+    {
+      "artifact_id": "81c34cb0-0723-43f6-9c19-066528d9f3a5",
+      "kind": "logs",
+      "relpath": "logs/stderr.log",
+      "timestamp": "2026-09-10T21:31:00.271046Z"
+    }
+  ],
+  "failed": []
+}

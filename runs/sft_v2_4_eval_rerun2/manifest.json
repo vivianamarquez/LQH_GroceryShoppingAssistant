@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "run_id": "d0d28501-25dc-41b5-b49a-c0f93893843f",
+  "name": "sft_v2_4_eval_rerun2",
+  "created_at": "2026-09-10T19:48:51+00:00",
+  "kind": "eval_hf",
+  "state": "completed",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "spec_sha256_source": "submission",
+  "config_sha256": "e13a083674c1125b1400c68b38d21b5e25fcc2274533cc32826565141efefbc2",
+  "base_model": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "eval_dataset": "datasets/grocery_list_v2_eval_filtered/data.parquet",
+  "scorer": "evals/scorers/grocery_list_v1.md",
+  "training_method": "lora",
+  "num_samples": 167,
+  "judge_size": "medium",
+  "system_prompt_path": "prompts/grocery_list_v0.md",
+  "result_summary": {
+    "scores": {
+      "mean": 5.62,
+      "median": 4.0
+    },
+    "num_scored": 167,
+    "num_failed": 0
+  }
+}

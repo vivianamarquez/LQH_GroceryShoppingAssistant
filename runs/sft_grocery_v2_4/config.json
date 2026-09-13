@@ -1,0 +1,164 @@
+{
+  "type": "sft",
+  "base_model": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "dataset": "datasets/grocery_list_v2_train_filtered/data.parquet",
+  "dataset_rows": {
+    "train": 1637,
+    "train_effective": 1637,
+    "eval": 167
+  },
+  "num_samples": 1637,
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "training": {
+    "learning_rate": 0.0001,
+    "max_seq_length": 2048,
+    "per_device_batch_size": 49,
+    "gradient_accumulation_steps": 1,
+    "effective_batch_size": 49,
+    "auto_batch": true,
+    "auto_seq_length": true,
+    "num_epochs": 3,
+    "seed": 42
+  },
+  "lora": {
+    "enabled": true,
+    "r": 32,
+    "alpha": 64,
+    "dropout": 0.02,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "in_proj",
+      "out_proj",
+      "w1",
+      "w2",
+      "w3"
+    ]
+  },
+  "manifest": [
+    "base_model_ref",
+    "dataset",
+    "eval_dataset",
+    "scorer"
+  ],
+  "eval_dataset": "datasets/grocery_list_v2_eval_filtered/data.parquet",
+  "eval_on_checkpoints": true,
+  "scorer": "evals/scorers/grocery_list_v1.md",
+  "response_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "grocery_list",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "line_items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "product": {
+                      "type": "string"
+                    },
+                    "line_item_measurements": {
+                      "type": "object",
+                      "properties": {
+                        "quantity": {
+                          "type": "number"
+                        },
+                        "unit": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "quantity",
+                        "unit"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "filters": {
+                      "type": "object",
+                      "properties": {
+                        "brand_filters": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "brand": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "brand"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "health_filters": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "label"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "brand_filters",
+                        "health_filters"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "product"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "title",
+              "line_items"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "enum": [
+                  "not_a_grocery_request"
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "datamix_version_id": "6c4db301-5ce8-4f54-b5e7-2511f908e0c1",
+  "base_model_ref": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "base_model_revision": "0f604ada3f766f9f257460c4c9f0b5d6f69d431b",
+  "base_model_version_id": "e72e4a29-54fc-4388-9b99-c57b5d2fa6ac"
+}

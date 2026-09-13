@@ -69,9 +69,10 @@ const workflow = [
               Saved prompt for the 4.58/10 baseline. The live Model lab uses
               a shorter prompt.
             </p>
-            <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap break-words rounded-lg bg-white p-3 font-mono leading-6" tabIndex={0} aria-label="Saved baseline system prompt">
-              <code>{baselineSystemPrompt}</code>
-            </pre>
+            {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Keyboard users need to focus this region to scroll the long prompt. */}
+            <section className="max-h-80 overflow-y-auto rounded-lg bg-white p-3" tabIndex={0} aria-label="Saved baseline system prompt">
+              <pre className="whitespace-pre-wrap break-words font-mono leading-6"><code>{baselineSystemPrompt}</code></pre>
+            </section>
           </div>
         </details>
       </>

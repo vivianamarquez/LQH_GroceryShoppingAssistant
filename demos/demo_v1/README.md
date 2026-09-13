@@ -85,3 +85,14 @@ Keep credentials in `.env.local`; do not commit them. Instacart credentials are 
 ## Folder layout
 
 The app's source, assets, `.env.local`, and `.runtime/` live here. Shared models stay in `../../models/`; LQH specifications, datasets, training runs, and evaluation outputs remain at the repository root.
+
+## Code checks
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+Tests mock network calls: they do not use credentials, contact Kroger, or change a real cart. They cover package quantities, model request settings, and API error handling.

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "dataset_id": "5529c3cd-dfbf-41d2-b0fd-d715e4d23654",
+  "version": 1,
+  "name": "grocery_list_v2_eval_filtered",
+  "created_at": "2026-09-10T17:09:05+00:00",
+  "purpose": "validation",
+  "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+  "rows": 167,
+  "content_sha256": "9aca7421d156787086e1229d0fd2476e9646c06f1de4441b6ccab99f30176397",
+  "sources": [
+    {
+      "path": "datasets/grocery_list_v2_eval/data.parquet",
+      "hash": "f26d32b46a61"
+    }
+  ],
+  "sources_hashed_at": "finalization",
+  "scorer_path": "evals/scorers/grocery_list_v1.md",
+  "scorer_hash": "df8bc3ee8fbc",
+  "threshold": 7,
+  "kept_unjudged": 5,
+  "derived_from": "datasets/grocery_list_v2_eval/data.parquet"
+}

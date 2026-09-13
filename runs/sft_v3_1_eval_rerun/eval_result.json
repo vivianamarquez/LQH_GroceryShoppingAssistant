@@ -1,0 +1,50 @@
+{
+  "num_scored": 165,
+  "num_failed": 2,
+  "scores": {
+    "mean": 5.52,
+    "median": 4.0
+  },
+  "scores_weighted_mean": 5.52,
+  "per_source": {
+    "grocery_list_v2_eval_filtered": {
+      "num_scored": 165,
+      "num_attempted": 167,
+      "num_failed": 2,
+      "scores": {
+        "mean": 5.52,
+        "median": 4.0,
+        "std": 2.7,
+        "min": 1.0,
+        "max": 10.0
+      }
+    }
+  },
+  "score_distribution": {
+    "n": 165,
+    "percentiles": {
+      "p10": 3.0,
+      "p25": 4.0,
+      "p50": 4.0,
+      "p75": 9.0,
+      "p90": 10.0
+    },
+    "histogram": {
+      "0": 0,
+      "1": 9,
+      "2": 5,
+      "3": 6,
+      "4": 81,
+      "5": 1,
+      "6": 9,
+      "7": 4,
+      "8": 6,
+      "9": 26,
+      "10": 18
+    }
+  },
+  "decoding": "json_schema",
+  "engine": "sglang",
+  "protocol_id": "da51d45b8bc47426ad1c3da0a5a97d53cab6c237ac4fdb8a033886a36fd239dc",
+  "judge_pin": "judge:pin:jp-6cb78b8a48f9"
+}

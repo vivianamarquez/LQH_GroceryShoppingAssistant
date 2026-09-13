@@ -1,0 +1,9 @@
+{
+  "job_id": "0aab3331-5767-4821-834e-0266e01df522",
+  "remote_name": "cloud",
+  "remote_run_dir": "cloud:0aab3331-5767-4821-834e-0266e01df522",
+  "module": "lqh.infer.eval_hf",
+  "kind": "eval_hf",
+  "backend": "cloud",
+  "owner_project_id": "75e54968-cb78-428c-9278-493bf2b61ba3"
+}

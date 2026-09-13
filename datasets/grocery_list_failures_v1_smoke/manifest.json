@@ -1,0 +1,14 @@
+{
+  "schema_version": 2,
+  "name": "grocery_list_failures_v1_smoke",
+  "channel": "main",
+  "current": {
+    "object_sha": "9f40326b4e08fb5fd14326f93f763af664345ebd9cece1dd7e4fc6073c3da8f0",
+    "purpose": "smoke",
+    "rows": 3,
+    "spec_sha256": "4cd667ee1fe15376ff9ebcc38f1a5f74e2963e69cd331123cb1e7ba5a6855878",
+    "created_at": "2026-09-10T19:56:23+00:00"
+  },
+  "history": [],
+  "updated_at": "2026-09-10T19:56:23+00:00"
+}
