@@ -220,9 +220,9 @@ export function TechnicalDetails() {
 
       <figure className="panel overflow-hidden">
         <Image
-          src="/localdemo.gif"
+          src="/2026.09.13_grocery_shopping.gif"
           alt="Demonstration of the local grocery shopping assistant"
-          width={1660}
+          width={1720}
           height={1080}
           unoptimized
           className="block h-auto w-full"
