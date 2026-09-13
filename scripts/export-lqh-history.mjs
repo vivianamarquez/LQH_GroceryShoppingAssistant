@@ -18,7 +18,7 @@ const credentialField = /^(?:api[_-]?key|client[_-]?(?:secret|id)|access[_-]?tok
 function remember(value, replacement) {
   if (typeof value === 'string' && value.length >= 6) privateValues.set(value, replacement);
 }
-for (const file of ['.env', 'demos/demo_v1/.env.local']) {
+for (const file of ['.env', 'demos/local_demo/.env.local']) {
   const full = path.join(root, file);
   if (!fs.existsSync(full)) continue;
   for (const [key, value] of Object.entries(parseEnv(fs.readFileSync(full, 'utf8')))) {

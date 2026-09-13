@@ -19,4 +19,4 @@ The local working folder also contains `models/` for GGUF model files and `.lqh/
 
 The `demos/` folder contains the different demos and versions built around the model.
 
-- [demo_v1](demos/demo_v1/): the local web demo, with a **Model lab** for comparing the original and fine-tuned models, a **Kroger cart** integration, and an **About this app** page explaining the workflow.
+- [local_demo](demos/local_demo/): the local web demo, with a **Model lab** for comparing the original and fine-tuned models, a **Kroger cart** integration, and an **About this app** page explaining the workflow.

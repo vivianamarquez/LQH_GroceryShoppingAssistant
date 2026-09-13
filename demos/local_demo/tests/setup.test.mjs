@@ -16,7 +16,7 @@ import { test } from 'node:test';
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'grocery-setup-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
-  const demo = join(root, 'demos/demo_v1');
+  const demo = join(root, 'demos/local_demo');
   const bin = join(root, 'bin');
   mkdirSync(join(demo, 'scripts'), { recursive: true });
   mkdirSync(join(root, 'models'));

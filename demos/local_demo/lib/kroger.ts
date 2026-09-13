@@ -15,7 +15,7 @@ function credentials() {
     process.env.KROGER_CLIENT_SECRET ?? process.env.kroger_client_secret;
 
   if (!clientId || !clientSecret) {
-    throw new Error('Kroger credentials are missing from demos/demo_v1/.env.local.');
+    throw new Error('Kroger credentials are missing from demos/local_demo/.env.local.');
   }
   return { clientId, clientSecret };
 }

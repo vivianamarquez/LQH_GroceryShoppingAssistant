@@ -29,7 +29,7 @@ Copy the two model files listed above into the repository's `models/` directory 
 Then, from the repository root:
 
 ```bash
-cd demos/demo_v1
+cd demos/local_demo
 npm run setup
 npm run demo
 ```
