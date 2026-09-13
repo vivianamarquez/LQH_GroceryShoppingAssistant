@@ -3,7 +3,7 @@
 | Model | Where it runs |
 | --- | --- |
 | LQH tuned | Vercel calls `https://inference.lqh.ai/v1/chat/completions` with a server-only key. |
-| Original LFM2.5-1.2B-Instruct | wllama runs the Q4 GGUF in the visitor’s browser. |
+| Original LFM2.5-1.2B-Instruct | wllama runs the Q4 GGUF in the visitor’s browser, with WebGPU acceleration when available and a CPU fallback. |
 
 ## Run locally
 
