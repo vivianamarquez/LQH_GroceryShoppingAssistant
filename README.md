@@ -12,7 +12,6 @@ The repository root contains the task definition and artifacts produced during t
 - `data_gen/` and `datasets/`: data-generation scripts and generated training/evaluation data.
 - `evals/`, `runs/`, and `reports/`: grading rubrics, experiment configurations, training/evaluation outputs, and analysis.
 - `NOTES.md`: progress notes and experiment decisions.
-- [Sanitized LQH history](reports/lqh-history/): the original request, tuning conversations, tool calls, and results, with private details removed.
 
 The local working folder also contains `models/` for GGUF model files and `.lqh/` for LQH session records. These are ignored by Git and are not included when cloning the repository.
 
