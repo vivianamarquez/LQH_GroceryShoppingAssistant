@@ -218,17 +218,6 @@ export function TechnicalDetails() {
         </div>
       </header>
 
-      <figure className="panel overflow-hidden">
-        <Image
-          src="/2026.09.13_grocery_shopping.gif"
-          alt="Demonstration of the local grocery shopping assistant"
-          width={1720}
-          height={1080}
-          unoptimized
-          className="block h-auto w-full"
-        />
-      </figure>
-
       <section className="panel p-6 sm:p-8">
         <Heading label="Workflow" title="From LQH to the grocery app">
           The task was to turn noisy everyday grocery requests, resembling
@@ -261,6 +250,23 @@ export function TechnicalDetails() {
           ))}
         </ol>
       </section>
+
+      <figure className="mx-auto w-full max-w-4xl py-2">
+        <div className="overflow-hidden rounded-xl border border-primary/20! bg-white shadow-sm">
+          <Image
+            src="/2026.09.13_grocery_shopping.gif"
+            alt="Demonstration of the local grocery shopping assistant"
+            width={1720}
+            height={1080}
+            unoptimized
+            className="block h-auto w-full"
+          />
+        </div>
+        <figcaption className="mt-3 px-2 text-center text-sm leading-6 text-muted-foreground">
+          <span className="font-medium text-foreground">Demo:</span>{' '}
+          Grocery request → product matches → Kroger cart.
+        </figcaption>
+      </figure>
 
       <section className="rounded-2xl border bg-white/60 p-6 sm:p-8">
         <h2 className="text-xl font-semibold tracking-tight">
