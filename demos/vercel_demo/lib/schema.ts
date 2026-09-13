@@ -1,0 +1,65 @@
+export const grocerySchema = {
+  type: 'object',
+  oneOf: [
+    {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        line_items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              product: { type: 'string' },
+              line_item_measurements: {
+                type: 'object',
+                properties: {
+                  quantity: { type: 'number' },
+                  unit: { type: 'string' },
+                },
+                required: ['quantity', 'unit'],
+                additionalProperties: false,
+              },
+              filters: {
+                type: 'object',
+                properties: {
+                  brand_filters: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: { brand: { type: 'string' } },
+                      required: ['brand'],
+                      additionalProperties: false,
+                    },
+                  },
+                  health_filters: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: { label: { type: 'string' } },
+                      required: ['label'],
+                      additionalProperties: false,
+                    },
+                  },
+                },
+                additionalProperties: false,
+              },
+            },
+            required: ['product'],
+            additionalProperties: false,
+          },
+        },
+      },
+      required: ['title', 'line_items'],
+      additionalProperties: false,
+    },
+    {
+      type: 'object',
+      properties: {
+        error: { type: 'string', enum: ['not_a_grocery_request'] },
+      },
+      required: ['error'],
+      additionalProperties: false,
+    },
+  ],
+};

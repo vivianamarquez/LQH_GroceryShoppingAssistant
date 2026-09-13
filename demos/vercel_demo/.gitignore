@@ -1,0 +1,7 @@
+/public/wllama/
+/node_modules/
+/.next/
+/.vercel/
+.env*
+!.env.example
+*.tsbuildinfo
