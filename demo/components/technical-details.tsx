@@ -107,10 +107,10 @@ LoRA rank: 32`,
           <strong>6.43</strong>. A schema bug forced unwanted filters.
         </p>
         <p>
-          <strong>Correct the schema:</strong> 7.14 with a system prompt.
+          Correct the schema: <strong>7.14</strong> with a system prompt.
           <br />
-          <strong>Remove the prompt’s example-product interference:</strong>{' '}
-          8.05 on the same round-2 checkpoint.
+          Remove the system prompt: <strong>8.05</strong> on the same
+          round-2 checkpoint.
         </p>
       </>
     ),
@@ -120,8 +120,8 @@ LoRA rank: 32`,
     content: (
       <>
         <p>
-          <strong>Merge the round-2 adapter</strong> into
-          LFM2.5-1.2B-Instruct and export Q4 and Q8 GGUF files. Run them with{' '}
+          Merge the round-2 adapter into LFM2.5-1.2B-Instruct and{' '}
+          <strong>export Q4 and Q8 GGUF files</strong>. Run them with{' '}
           <code>llama.cpp</code>.
         </p>
         <p>
@@ -132,12 +132,12 @@ LoRA rank: 32`,
     ),
   },
   {
-    title: 'Kroger account and web app',
+    title: 'Kroger developer account and web app',
     content: (
       <>
         <p>
-          Create a Kroger developer account, register an <strong>OAuth app
-          and callback URL</strong>, and store its credentials server-side.
+          Create a Kroger developer account, register an <strong>OAuth app</strong>
+          {' '}and callback URL, and store its credentials server-side.
         </p>
         <p>
           Build the <strong>React/TypeScript interface</strong> with
@@ -152,12 +152,12 @@ LoRA rank: 32`,
     content: (
       <>
         <p>
-          Use the <strong>ZIP to select a store</strong>, search its catalog
+          Use the ZIP to select a store, search its catalog
           using the extracted products and preferences, then show product
           choices and package quantities.
         </p>
         <p>
-          <strong>After review, send UPCs and quantities</strong> to the
+          After review, send UPCs and quantities to the
           connected Kroger account and open the cart in a new tab.
         </p>
       </>
