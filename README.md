@@ -4,6 +4,8 @@ This project uses [LQH](https://lqh.ai/) to fine-tune **LFM2.5-1.2B-Instruct** w
 
 The demos use that JSON to display a grocery list and, in the Kroger integration, find matching catalog products and add reviewed selections to a connected account's cart. Checkout stays with Kroger.
 
+![Local grocery shopping assistant demo](demos/local_demo/public/localdemo.gif)
+
 ## LQH workflow and outputs
 
 The repository root contains the task definition and artifacts produced during the LQH workflow:

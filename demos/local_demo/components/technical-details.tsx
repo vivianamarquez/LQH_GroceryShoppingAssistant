@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { baselineSystemPrompt } from '@/lib/baseline-system-prompt';
 
 const workflow = [
@@ -216,6 +217,17 @@ export function TechnicalDetails() {
           <span>Local Q4 GGUF</span>
         </div>
       </header>
+
+      <figure className="panel overflow-hidden">
+        <Image
+          src="/localdemo.gif"
+          alt="Demonstration of the local grocery shopping assistant"
+          width={1660}
+          height={1080}
+          unoptimized
+          className="block h-auto w-full"
+        />
+      </figure>
 
       <section className="panel p-6 sm:p-8">
         <Heading label="Workflow" title="From LQH to the grocery app">
