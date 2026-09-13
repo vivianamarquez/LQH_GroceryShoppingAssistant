@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <title>Grocery Shopping Assistant</title>
-  <rect width="32" height="32" rx="8" fill="#0068b3"/>
-  <g stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m11 14 3-6m7 6-3-6M7 15h18M9 15l2 10h10l2-10"/>
-    <path d="M13 19v3m6-3v3"/>
-  </g>
-</svg>
