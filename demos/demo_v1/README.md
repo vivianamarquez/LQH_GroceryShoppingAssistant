@@ -34,9 +34,9 @@ npm run setup
 npm run demo
 ```
 
-`npm run setup` checks the Node version, runs `npm ci` to install the locked JavaScript dependencies, creates `.env.local` from `.env.example` if missing, and checks for the engine and both GGUF files. It preserves existing credentials and reports missing prerequisites. It does not install system software, download models, or obtain Kroger credentials.
+`npm run setup` checks the Node version, runs `npm ci` to install the locked JavaScript dependencies, creates `.env.local` from `.env.example` if missing, and checks for the engine and both GGUF files. It preserves existing credentials and reports missing prerequisites. 
 
-No Python or `uv` environment is needed. On subsequent runs, use **`npm run demo`** from this folder. Rerun setup after pulling dependency changes.
+On subsequent runs, use **`npm run demo`** from this folder. Rerun setup after pulling dependency changes.
 
 ## Run the demo
 
